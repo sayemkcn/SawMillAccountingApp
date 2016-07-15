@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Add New Product</title>
+</head>
+<body>
+	<span style="color: green;" th:if="${message != null}" th:text="${message}"></span>
+	<span style="color: red;" th:if="${param.message != null}" th:text="${param.message[0]}"></span>
+	
+	<!-- UPDATE PRODUCT -->
+	<form th:if="${product != null}" th:action="@{/product/update/}+${product.getId()}" method="post">
+		Add Product:<br></br>
+		<hr></hr>
+		Serial: <input type="text" name="serial" placeholder="Serial" th:value="${product?.getSerial()}"></input><br></br>
+		Product Type: <input type="text" name="type" placeholder="Type" th:value="${product?.getType()}"></input><br></br>
+		Properties:<br></br>
+		<input type="text" name="productProperties.name" placeholder="Name" th:value="${product?.getProductProperties()?.getName()}"></input>
+		<input type="number" name="productProperties.length" placeholder="Length" th:value="${product?.getProductProperties()?.getLength()}"></input><br></br>
+		<input type="number" name="productProperties.radious" placeholder="radious" th:value="${product?.getProductProperties()?.getRadious()}"></input>
+		<input type="number" name="productProperties.width" placeholder="Width" th:value="${product?.getProductProperties()?.getWidth()}"></input><br></br>
+		<input type="number" name="productProperties.rate" placeholder="Rate" th:value="${product?.getProductProperties()?.getRate()}"></input><br></br><br></br>
+		Purchase Price:<br></br>
+		<input type="text" name="purchasePrice" placeholder="Purchase Price" th:value="${product?.getPurchasePrice()}"></input><br></br><br></br>
+		Note:<br></br>
+		<input type="text" name="note" placeholder="Note" th:value="${product?.getNote()}"></input><br></br><br></br>
+		<input type="submit" value="Update Product"></input>
+	</form>
+	
+	<!-- NEW PRODUCT -->
+	<form th:if="${product == null}" th:action="@{/product/add}" method="post">
+		Add Product:<br></br>
+		<hr></hr>
+		Serial: <input type="text" name="serial" placeholder="Serial"></input><br></br>
+		Product Type: <input type="text" name="type" placeholder="Type"></input><br></br>
+		Properties:<br></br>
+		<input type="text" name="productProperties.name" placeholder="Name"></input>
+		<input type="number" name="productProperties.length" placeholder="Length"></input><br></br>
+		<input type="number" name="productProperties.radious" placeholder="radious"></input>
+		<input type="number" name="productProperties.width" placeholder="Width" ></input><br></br>
+		<input type="number" name="productProperties.rate" placeholder="Rate" ></input><br></br><br></br>
+		Purchase Price:<br></br>
+		<input type="text" name="purchasePrice" placeholder="Purchase Price" ></input><br></br><br></br>
+		Note:<br></br>
+		<input type="text" name="note" placeholder="Note" ></input><br></br><br></br>
+		<input type="submit" value="Add Product"></input>
+	</form>
+	
+</body>
+</html>
