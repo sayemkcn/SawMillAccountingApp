@@ -13,57 +13,69 @@ import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.repositories.ProductRepository;
 
 @Controller
-@RequestMapping(value="/product")
+@RequestMapping(value = "/product")
 public class ProductController {
-	
+
 	@Autowired
 	private ProductRepository productRepository;
-	
-	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String addProductForm(){
+
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	private String showProducts(Model model) {
+		model.addAttribute("productList", productRepository.findAll());
+		return "product/viewAll";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	private String showSingleProduct(@PathVariable("id") Long id, Model model) {
+		ProductEntity productEntity = productRepository.findOne(id);
+		model.addAttribute("product", productEntity);
+		return "product/view";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String addProductForm() {
 		return "product/addProduct";
 	}
-	
-	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String addProduct(@ModelAttribute ProductEntity productEntity,BindingResult bindingResult,Model model){
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addProduct(@ModelAttribute ProductEntity productEntity, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
-		}else{
+		} else {
 			productRepository.save(productEntity);
-			model.addAttribute("message","Successfully saved!");
+			model.addAttribute("message", "Successfully saved!");
 		}
 		return "product/addProduct";
 	}
-	
-	@RequestMapping(value="/update/{id}",method=RequestMethod.GET)
-	public String updateProductForm(@PathVariable("id") Long id,Model model){
+
+	@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
+	public String updateProductForm(@PathVariable("id") Long id, Model model) {
 		ProductEntity productEntity = productRepository.findOne(id);
-		model.addAttribute("product",productEntity);
+		model.addAttribute("product", productEntity);
 		return "product/addProduct";
 	}
-	
-	@RequestMapping(value="/update/{id}",method=RequestMethod.POST)
-	public String updateProduct(@ModelAttribute ProductEntity productEntity,BindingResult bindingResult,@PathVariable("id") Long id,Model model){
+
+	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+	public String updateProduct(@ModelAttribute ProductEntity productEntity, BindingResult bindingResult,
+			@PathVariable("id") Long id) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
-		}else{
+		} else {
 			productEntity.setId(id);
 			productRepository.save(productEntity);
-			model.addAttribute("message","Product successfully updated!");
 		}
-		return "product/addProduct";
+		return "redirect:/product/"+id+"?message=Product successfully updated!";
 	}
-	
-	@RequestMapping(value="/delete/{id}",method=RequestMethod.GET)
-	public String deleteProduct(@PathVariable("id") Long id){
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String deleteProduct(@PathVariable("id") Long id) {
 		try {
 			productRepository.delete(id);
-			return "redirect:/product/add?message=Successfully deleted!";
+			return "redirect:/product?message=Successfully deleted!";
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		return "redirect:/product/add";
+		return "redirect:/product";
 	}
 
-	
 }
