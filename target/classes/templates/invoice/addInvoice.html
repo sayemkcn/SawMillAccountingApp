@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Generate Invoice</title>
+
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		
+		th, td {
+			text-align: left;
+			padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+			background-color: #AFDCEC;
+		}
+		
+		th {
+			background-color: #AFDCEC;
+			color: white;
+			align
+			="center"
+		}
+	</style>
+	
+</head>
+<body>
+	<div>	
+		Filter:<br></br>
+		<form th:action="@{/invoice/create}" method="get">
+			<select name="type">
+				<option th:selected="${productType.equals('Round')}" value="Round">Round</option>
+				<option th:selected="${productType.equals('Sized')}" value="Sized">Sized</option>
+			</select><br></br>
+			<input type="submit" value="Apply Filter"></input><br></br>
+			<a th:href="@{/invoice/create}">Remove Filter</a>
+		</form>
+	</div>
+	<div>
+		<table th:if="${productList != null}">
+			<tr>
+				<th>Serial Number</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Purchase Price</th>
+				<th>Status</th>
+				<th>Note</th>
+				<th>Add to invoice</th>
+			</tr>
+			<tr th:each="product:${productList}">
+				<td th:text="${product.getSerial()}"></td>
+				<td>
+					<a th:href="@{/product/}+${product.getId()}">
+						<span th:text="${product.getProductProperties().getName()}"></span>
+					</a>
+				</td>
+				<td th:text="${product.getType()}"></td>
+				<td th:text="${product.getPurchasePrice()}"></td>
+				<td th:text="${product.getStatus()}"></td>
+				<td th:text="${product.getNote()}"></td>
+				<td><a th:href="@{/invoice/session/add/}+${product.getId()}">Add to Invoice</a></td>
+			</tr>
+		</table>
+	</div>
+	
+	<br></br>
+	<hr></hr>
+	Added to Invoice:<br></br>
+	<div>
+		<table th:if="${session.productList != null}">
+			<tr>
+				<th>Serial Number</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Purchase Price</th>
+				<th>Status</th>
+				<th>Note</th>
+				<th>Add to invoice</th>
+			</tr>
+			<tr th:each="product:${session.productList}">
+				<td th:text="${product.getSerial()}"></td>
+				<td>
+					<a th:href="@{/product/}+${product.getId()}">
+						<span th:text="${product.getProductProperties().getName()}"></span>
+					</a>
+				</td>
+				<td th:text="${product.getType()}"></td>
+				<td th:text="${product.getPurchasePrice()}"></td>
+				<td th:text="${product.getStatus()}"></td>
+				<td th:text="${product.getNote()}"></td>
+				<td><a th:href="@{/invoice/session/remove/}+${product.getId()}">Remove</a></td>
+				<td th:if="${product.getType().equals('Sized')}"><a th:href="@{/invoice/session/edit/}+${product.getId()}">Properties</a></td>
+			</tr>
+		</table>
+	</div>
+	
+</body>
+</html>

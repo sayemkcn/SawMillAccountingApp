@@ -5,6 +5,13 @@
 <title>Add New Product</title>
 </head>
 <body>
+
+	<nav>
+		<ul>
+			<li><a th:href="@{/product}">All Products</a></li>
+		</ul>
+	</nav>
+	
 	<span style="color: green;" th:if="${message != null}" th:text="${message}"></span>
 	
 	<!-- UPDATE PRODUCT -->

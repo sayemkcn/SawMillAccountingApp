@@ -15,7 +15,7 @@
 	<span style="color: green;" th:if="${message != null}" th:text="${message}"></span>
 	
 	<!-- UPDATE PRODUCT -->
-	<form th:if="${product != null}" th:action="@{/product/update/}+${product.getId()}" method="post">
+	<form th:if="${product != null}" th:action="@{/invoice/session/edit/}+${product.getId()}" method="post">
 		Add Product:<br></br>
 		<hr></hr>
 		Serial: <input type="text" name="serial" placeholder="Serial" th:value="${product?.getSerial()}"></input><br></br>
@@ -39,33 +39,6 @@
 		Note:<br></br>
 		<textarea type="text" name="note" placeholder="Note" th:text="${product?.getNote()}"></textarea><br></br><br></br>
 		<input type="submit" value="Update Product"></input>
-	</form>
-	
-	<!-- NEW PRODUCT -->
-	<form th:if="${product == null}" th:action="@{/product/add}" method="post">
-		Add Product:<br></br>
-		<hr></hr>
-		Serial: <input type="text" name="serial" placeholder="Serial"></input><br></br>
-		Product Type: 
-		<select name="type">
-			<option value="Round">Round</option>
-			<option value="Sized">Sized</option>
-		</select><br></br><br></br>
-		Properties:<br></br>
-		<div>
-			Name: <input type="text" name="productProperties.name" placeholder="Name"></input><br></br>
-			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter"></input><br></br>
-			Height: <input type="number" name="productProperties.height" placeholder="Height" ></input><br></br>
-			Width: <input type="number" name="productProperties.width" placeholder="Width" ></input><br></br>
-			Length: <input type="number" name="productProperties.length" placeholder="Length"></input><br></br>
-			Rate: <input type="number" name="productProperties.rate" placeholder="Rate" ></input><br></br>
-		</div>
-		<br></br>
-		Purchase Price:<br></br>
-		<input type="text" name="purchasePrice" placeholder="Purchase Price" ></input><br></br><br></br>
-		Note:<br></br>
-		<textarea type="text" name="note" placeholder="Note" ></textarea><br></br><br></br>
-		<input type="submit" value="Add Product"></input>
 	</form>
 	
 </body>

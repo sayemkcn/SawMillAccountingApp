@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"sayem.toracode.controllers","sayem.toracode.pojo"})
+@ComponentScan(basePackages={"sayem.toracode.controllers","sayem.toracode.services","sayem.toracode.pojo"})
 @EnableJpaRepositories(basePackages="sayem.toracode.repositories")
 @EntityScan(basePackages="sayem.toracode.entities")
 public class AccountingAppApplication {

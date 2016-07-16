@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Invoice List</title>
+</head>
+<body>
+	
+	<div>
+		<a th:href="@{/invoice/create}">Generate Invoice</a>
+		<table>
+			<tr th:each="invoice:${invoiceList}">
+				<td><span th:text="${invoice.getProductCategory()}"></span></td>
+				<td><span th:text="${invoice.getDiscount()}"></span></td>
+				<td th:each="product:${invoice.getProductList()}">
+					<a th:href="@{/product/}+${product.getId()}"><span th:text="${product.getProductProperties().getName()}"></span></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+</body>
+</html>
