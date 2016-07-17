@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8"></meta>
-<title>Add New Product</title>
+<title>Edit</title>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
 		</select><br></br>
 		Properties:<br></br>
 		<div>
-			Name: <input type="text" name="productProperties.name" placeholder="Name" th:value="${product?.getProductProperties()?.getName()}"></input><br></br>
+			Category: <input type="text" name="category" placeholder="Name" th:value="${product?.getCategory()}"></input><br></br>
 			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter" th:value="${product?.getProductProperties()?.getPerimeter()}"></input><br></br>
 			Height: <input type="number" name="productProperties.height" placeholder="Height" th:value="${product?.getProductProperties()?.getHeight()}"></input><br></br>
 			Width: <input type="number" name="productProperties.width" placeholder="Width" th:value="${product?.getProductProperties()?.getWidth()}"></input><br></br>

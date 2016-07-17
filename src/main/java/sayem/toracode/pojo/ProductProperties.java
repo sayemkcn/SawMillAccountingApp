@@ -4,20 +4,11 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class ProductProperties {
-	private String name;
 	private double length;
 	private double perimeter;
 	private double height;
 	private double width;
 	private int rate;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public double getLength() {
 		return length;

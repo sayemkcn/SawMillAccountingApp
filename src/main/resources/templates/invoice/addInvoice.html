@@ -44,7 +44,7 @@
 		<table th:if="${productList != null}">
 			<tr>
 				<th>Serial Number</th>
-				<th>Name</th>
+				<th>Category</th>
 				<th>Type</th>
 				<th>Purchase Price</th>
 				<th>Status</th>
@@ -55,7 +55,7 @@
 				<td th:text="${product.getSerial()}"></td>
 				<td>
 					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getProductProperties().getName()}"></span>
+						<span th:text="${product.getCategory()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>
@@ -74,7 +74,7 @@
 		<table th:if="${session.productList != null}">
 			<tr>
 				<th>Serial Number</th>
-				<th>Name</th>
+				<th>Category</th>
 				<th>Type</th>
 				<th>Purchase Price</th>
 				<th>Status</th>
@@ -85,7 +85,7 @@
 				<td th:text="${product.getSerial()}"></td>
 				<td>
 					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getProductProperties().getName()}"></span>
+						<span th:text="${product.getCategory()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>
