@@ -24,9 +24,13 @@
 			<option th:selected="${product.getType().equals('Round')}" value="Round">Round</option>
 			<option th:selected="${product.getType().equals('Sized')}" value="Sized">Sized</option>
 		</select><br></br>
+		Category:
+		<select name="categoryName" >
+			<option th:each="category:${categoryList}" th:text="${category.getName()}" th:selected="${product?.getCategory()?.getName().equals(category.getName())}"></option>
+		</select>
+		<br></br>
 		Properties:<br></br>
 		<div>
-			Category: <input type="text" name="category" placeholder="Name" th:value="${product?.getCategory()}"></input><br></br>
 			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter" th:value="${product?.getProductProperties()?.getPerimeter()}"></input><br></br>
 			Height: <input type="number" name="productProperties.height" placeholder="Height" th:value="${product?.getProductProperties()?.getHeight()}"></input><br></br>
 			Width: <input type="number" name="productProperties.width" placeholder="Width" th:value="${product?.getProductProperties()?.getWidth()}"></input><br></br>
@@ -51,9 +55,13 @@
 			<option value="Round">Round</option>
 			<option value="Sized">Sized</option>
 		</select><br></br><br></br>
+		Category:
+		<select name="categoryName">
+			<option th:each="category:${categoryList}" th:text="${category.getName()}"></option>
+		</select>
+		<br></br>
 		Properties:<br></br>
 		<div>
-			Category: <input type="text" name="category" placeholder="Category"></input><br></br>
 			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter"></input><br></br>
 			Height: <input type="number" name="productProperties.height" placeholder="Height" ></input><br></br>
 			Width: <input type="number" name="productProperties.width" placeholder="Width" ></input><br></br>

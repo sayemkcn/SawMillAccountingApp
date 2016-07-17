@@ -16,7 +16,7 @@
 	<div th:if="${product != null}">
 		Serial No: <span th:text="${product.getSerial()}"></span><br></br>
 		Product Type: <span th:text="${product.getType()}"></span><br></br>
-		Category: <span th:text="${product.getCategory()}"></span><br></br>
+		Category: <span th:text="${product.getCategory().getName()}"></span><br></br>
 		Perimeter: <span th:text="${product.getProductProperties().getPerimeter()}"></span><br></br>
 		Height: <span th:text="${product.getProductProperties().getHeight()}"></span><br></br>
 		Width: <span th:text="${product.getProductProperties().getWidth()}"></span><br></br>		

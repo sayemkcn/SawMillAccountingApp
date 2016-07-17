@@ -59,7 +59,7 @@
 				<td th:text="${product.getSerial()}"></td>
 				<td>
 					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getCategory()}"></span>
+						<span th:text="${product.getCategory().getName()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>

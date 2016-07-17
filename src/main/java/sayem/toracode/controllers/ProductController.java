@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
+import sayem.toracode.repositories.CategoryRepository;
 import sayem.toracode.repositories.ProductRepository;
+import sayem.toracode.services.CategoryService;
 
 @Controller
 @RequestMapping(value = "/product")
@@ -18,6 +21,8 @@ public class ProductController {
 
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private CategoryService categoryService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	private String showProducts(Model model) {
@@ -33,7 +38,8 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addProductForm() {
+	public String addProductForm(Model model) {
+		model.addAttribute("categoryList",categoryService.findAll());
 		return "product/addProduct";
 	}
 
@@ -44,7 +50,10 @@ public class ProductController {
 		} else {
 			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
 			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
-			productRepository.save(productEntity);
+			// find category with category name and save it to product object
+			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
+			productEntity.setCategory(category);
+			productRepository.saveAndFlush(productEntity);
 			model.addAttribute("message", "Successfully saved!");
 		}
 		return "product/addProduct";
@@ -54,6 +63,7 @@ public class ProductController {
 	public String updateProductForm(@PathVariable("id") Long id, Model model) {
 		ProductEntity productEntity = productRepository.findOne(id);
 		model.addAttribute("product", productEntity);
+		model.addAttribute("categoryList",categoryService.findAll());
 		return "product/addProduct";
 	}
 
@@ -64,6 +74,9 @@ public class ProductController {
 			System.out.println(bindingResult.toString());
 		} else {
 			productEntity.setId(id);
+			// find category with category name and save it to product object
+			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
+			productEntity.setCategory(category);
 			productRepository.save(productEntity);
 		}
 		return "redirect:/product/" + id + "?message=Product successfully updated!";

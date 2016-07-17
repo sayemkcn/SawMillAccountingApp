@@ -59,7 +59,7 @@
 				<td th:text="${product.getSerial()}"></td>
 				<td>
 					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getCategory()}"></span>
+						<span th:text="${product.getCategory().getName()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>
@@ -73,6 +73,8 @@
 	
 	<br></br>
 	<hr></hr>
+	
+	<!-- SESSION ADDED ITEMS -->
 	Added to Invoice:<br></br>
 	<div>
 		<table th:if="${session.productList != null}">
@@ -89,7 +91,7 @@
 				<td th:text="${product.getSerial()}"></td>
 				<td>
 					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getCategory()}"></span>
+						<span th:text="${product.getCategory().getName()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>

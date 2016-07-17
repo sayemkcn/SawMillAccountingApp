@@ -3,6 +3,8 @@ package sayem.toracode.entities;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import sayem.toracode.pojo.ProductProperties;
 
@@ -10,7 +12,10 @@ import sayem.toracode.pojo.ProductProperties;
 public class ProductEntity extends BaseEntity {
 	private String serial;
 	private String type;
-	private String category;
+	@Transient
+	private String categoryName;
+	@OneToOne
+	private CategoryEntity category;
 	@Embedded
 	private ProductProperties productProperties;
 	private long purchasePrice;
@@ -34,14 +39,6 @@ public class ProductEntity extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public ProductProperties getProductProperties() {
@@ -90,6 +87,22 @@ public class ProductEntity extends BaseEntity {
 
 	public void setInvoice(InvoiceEntity invoice) {
 		this.invoice = invoice;
+	}
+
+	public CategoryEntity getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 }
