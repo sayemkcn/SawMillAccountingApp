@@ -42,6 +42,8 @@ public class ProductController {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
 		} else {
+			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
+			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
 			productRepository.save(productEntity);
 			model.addAttribute("message", "Successfully saved!");
 		}
@@ -64,7 +66,7 @@ public class ProductController {
 			productEntity.setId(id);
 			productRepository.save(productEntity);
 		}
-		return "redirect:/product/"+id+"?message=Product successfully updated!";
+		return "redirect:/product/" + id + "?message=Product successfully updated!";
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)

@@ -31,7 +31,7 @@ public class InvoiceController {
 
 	private static final String SESSION_ATTRIBUTE = "productList";
 	private static final String SESSION_ATTRIBUTE_EDITED_ITEMS = "editedProductList";
-	
+
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String showAll(Model model) {
 		model.addAttribute("invoiceList", invoiceRepository.findAll());
@@ -39,11 +39,15 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createInvoicePage(@RequestParam(value = "type", required = false) String type, Model model) {
-		if (type == null || type.isEmpty()) {
+	public String createInvoicePage(@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "serial", required = false) String serialNumber, Model model) {
+		if ((type == null || type.isEmpty()) && (serialNumber == null || serialNumber.isEmpty())) {
 			model.addAttribute("productType", "Round");
 			model.addAttribute("productList", productService.findAllProducts());
-		} else {
+		} else if(!serialNumber.isEmpty()) {
+			model.addAttribute("productType",type);
+			model.addAttribute("productList",productService.findBySerial(serialNumber));
+		}else{
 			model.addAttribute("productType", type);
 			model.addAttribute("productList", productService.findProductByType(type));
 		}
@@ -64,7 +68,8 @@ public class InvoiceController {
 
 		// add product to session
 		ProductEntity product = productService.findById(id);
-		List<ProductEntity> productList = (List<ProductEntity>) session.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
+		List<ProductEntity> productList = (List<ProductEntity>) session
+				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
 		if (productList != null) {
 			productList.add(product);
 			session.setAttribute(InvoiceController.SESSION_ATTRIBUTE, productList);
@@ -78,8 +83,7 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/session/remove/{id}", method = RequestMethod.GET)
-	public String removeProductFromSession(@PathVariable("id") int id, HttpSession session, String type,
-			Model model) {
+	public String removeProductFromSession(@PathVariable("id") int id, HttpSession session, String type, Model model) {
 		// initialize page with product list
 		if (type == null || type.isEmpty()) {
 			model.addAttribute("productType", "Round");
@@ -90,7 +94,8 @@ public class InvoiceController {
 		}
 
 		// add product to session
-		List<ProductEntity> productList = (List<ProductEntity>) session.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
+		List<ProductEntity> productList = (List<ProductEntity>) session
+				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
 		try {
 			for (ProductEntity product : productList) {
 				if (product.getId() == id) {
@@ -110,9 +115,11 @@ public class InvoiceController {
 	}
 
 	@RequestMapping(value = "/session/edit/{id}", method = RequestMethod.POST)
-	public String editSessionItem(@ModelAttribute ProductEntity product, @PathVariable("id") Long id, Model model, HttpSession session) {
-		List<ProductEntity> productList = (List<ProductEntity>) session.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
-		
+	public String editSessionItem(@ModelAttribute ProductEntity product, @PathVariable("id") Long id, Model model,
+			HttpSession session) {
+		List<ProductEntity> productList = (List<ProductEntity>) session
+				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
+
 		// remove existing product from list
 		try {
 			for (ProductEntity prod : productList) {
@@ -130,13 +137,14 @@ public class InvoiceController {
 
 		// finally set session attribute
 		session.setAttribute(InvoiceController.SESSION_ATTRIBUTE, productList);
-		
-		// store edited items to a separate session for final calculation with existing product
+
+		// store edited items to a separate session for final calculation with
+		// existing product
 		// for finding remaining product
 		List<ProductEntity> editedProductItemList = new ArrayList<>();
 		editedProductItemList.add(product);
 		session.setAttribute(InvoiceController.SESSION_ATTRIBUTE_EDITED_ITEMS, editedProductItemList);
-		
+
 		return "redirect:/invoice/create";
 	}
 

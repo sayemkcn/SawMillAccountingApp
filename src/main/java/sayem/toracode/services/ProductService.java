@@ -35,4 +35,8 @@ public class ProductService {
 	public ProductEntity findById(Long id) {
 		return productRepository.findOne(id);
 	}
+	
+	public List<ProductEntity> findBySerial(String serial){
+		return productRepository.findBySerial(serial.toLowerCase());
+	}
 }

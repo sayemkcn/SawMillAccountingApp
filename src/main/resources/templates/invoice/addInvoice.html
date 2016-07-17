@@ -36,6 +36,10 @@
 				<option th:selected="${productType.equals('Round')}" value="Round">Round</option>
 				<option th:selected="${productType.equals('Sized')}" value="Sized">Sized</option>
 			</select><br></br>
+			or,
+			Enter Serial Number:<br></br>
+			<input type="text" name="serial"></input>
+			<br></br>
 			<input type="submit" value="Apply Filter"></input><br></br>
 			<a th:href="@{/invoice/create}">Remove Filter</a>
 		</form>

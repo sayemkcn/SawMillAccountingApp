@@ -10,4 +10,5 @@ import sayem.toracode.entities.ProductEntity;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 	List<ProductEntity> findByType(String type);
+	List<ProductEntity> findBySerial(String serial);
 }
