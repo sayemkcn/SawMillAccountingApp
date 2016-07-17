@@ -39,4 +39,8 @@ public class ProductService {
 	public List<ProductEntity> findBySerial(String serial){
 		return productRepository.findBySerial(serial.toLowerCase());
 	}
+	
+	public long calculatePrice(ProductEntity product){
+		return (long) (product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate());
+	}
 }

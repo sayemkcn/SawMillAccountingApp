@@ -1,9 +1,12 @@
 package sayem.toracode.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,26 +40,26 @@ public class ProductController {
 		return "product/view";
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String addProductForm(Model model) {
 		model.addAttribute("categoryList",categoryService.findAll());
 		return "product/addProduct";
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addProduct(@ModelAttribute ProductEntity productEntity, BindingResult bindingResult, Model model) {
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String addProduct(@ModelAttribute ProductEntity productEntity, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
 		} else {
+			// calculate purchase price and save into database
 			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
 			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
 			// find category with category name and save it to product object
 			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
 			productEntity.setCategory(category);
 			productRepository.saveAndFlush(productEntity);
-			model.addAttribute("message", "Successfully saved!");
 		}
-		return "product/addProduct";
+		return "redirect:/product/create?message=Successfully saved!";
 	}
 
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
@@ -74,6 +77,9 @@ public class ProductController {
 			System.out.println(bindingResult.toString());
 		} else {
 			productEntity.setId(id);
+			// calculate purchase price and save into database
+			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
+			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
 			// find category with category name and save it to product object
 			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
 			productEntity.setCategory(category);

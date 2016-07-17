@@ -4,105 +4,147 @@
 <meta charset="UTF-8"></meta>
 <title>Generate Invoice</title>
 
-	<style>
-		table {
-			border-collapse: collapse;
-			width: 100%;
-		}
-		
-		th, td {
-			text-align: left;
-			padding: 8px;
-		}
-		
-		tr:nth-child(even) {
-			background-color: #AFDCEC;
-		}
-		
-		th {
-			background-color: #AFDCEC;
-			color: white;
-			align
-			="center"
-		}
-	</style>
-	
+<style>
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #AFDCEC;
+}
+
+th {
+	background-color: #AFDCEC;
+	color: white;
+	align
+	="center"
+}
+</style>
+
 </head>
 <body>
-	<div>	
+	<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
+	<hr></hr>
+
+	<div>
 		Filter:<br></br>
 		<form th:action="@{/invoice/create}" method="get">
 			<select name="type">
 				<option th:selected="${productType.equals('Round')}" value="Round">Round</option>
 				<option th:selected="${productType.equals('Sized')}" value="Sized">Sized</option>
-			</select><br></br>
-			or,
-			Enter Serial Number:<br></br>
-			<input type="text" name="serial"></input>
-			<br></br>
-			<input type="submit" value="Apply Filter"></input><br></br>
-			<a th:href="@{/invoice/create}">Remove Filter</a>
+			</select><br></br> or, Enter Serial Number:<br></br> <input type="text"
+				name="serial"></input> <br></br> <input type="submit"
+				value="Apply Filter"></input><br></br> <a
+				th:href="@{/invoice/create}">Remove Filter</a>
 		</form>
 	</div>
 	<div>
-		<table th:if="${productList != null}">
+		<table th:if="${productList != null}" border="1px">
 			<tr>
 				<th>Serial Number</th>
 				<th>Category</th>
 				<th>Type</th>
-				<th>Purchase Price</th>
+				<th>Perimeter</th>
+				<th>Height</th>
+				<th>Width</th>
+				<th>Length</th>
+				<th>Size</th>
+				<th>Rate</th>
 				<th>Status</th>
 				<th>Note</th>
+				<th>Purchase Date</th>
 				<th>Add to invoice</th>
 			</tr>
 			<tr th:each="product:${productList}">
 				<td th:text="${product.getSerial()}"></td>
 				<td>
-					<a th:href="@{/product/}+${product.getId()}">
+					<a th:href="@{/product/}+${product.getId()}"> 
 						<span th:text="${product.getCategory().getName()}"></span>
 					</a>
 				</td>
 				<td th:text="${product.getType()}"></td>
-				<td th:text="${product.getPurchasePrice()}"></td>
+				<td th:text="${product.getProductProperties().getPerimeter()}"></td>
+				<td th:text="${product.getProductProperties().getHeight()}"></td>
+				<td th:text="${product.getProductProperties().getWidth()}"></td>
+				<td th:text="${product.getProductProperties().getLength()}"></td>
+				<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
+				<td th:text="${product.getProductProperties().getRate()}"></td>
 				<td th:text="${product.getStatus()}"></td>
 				<td th:text="${product.getNote()}"></td>
-				<td><a th:href="@{/invoice/session/add/}+${product.getId()}">Add to Invoice</a></td>
+				<td>
+					<span th:text="${product.getCreated()}"></span>
+					<span th:text="${product.getLastUpdated()}"></span>
+				</td>
+				<td><a th:href="@{/invoice/session/add/}+${product.getId()}">Add
+						to Invoice</a></td>
 			</tr>
 		</table>
 	</div>
-	
+
 	<br></br>
 	<hr></hr>
-	
+
 	<!-- SESSION ADDED ITEMS -->
-	Added to Invoice:<br></br>
+	Added to Invoice:
+	<br></br>
 	<div>
-		<table th:if="${session.productList != null}">
+		<table th:if="${session.productList != null}" border="1px">
 			<tr>
 				<th>Serial Number</th>
 				<th>Category</th>
 				<th>Type</th>
-				<th>Purchase Price</th>
+				<th>Perimeter</th>
+				<th>Height</th>
+				<th>Width</th>
+				<th>Length</th>
+				<th>Size</th>
+				<th>Rate</th>
+				<th>Calculated Price</th>
 				<th>Status</th>
 				<th>Note</th>
-				<th>Add to invoice</th>
+				<th>Purchase Date</th>
+				<th>Remove</th>
+				<th>Set properties</th>
 			</tr>
 			<tr th:each="product:${session.productList}">
 				<td th:text="${product.getSerial()}"></td>
-				<td>
-					<a th:href="@{/product/}+${product.getId()}">
-						<span th:text="${product.getCategory().getName()}"></span>
-					</a>
-				</td>
+				<td><a th:href="@{/product/}+${product.getId()}"> <span
+						th:text="${product.getCategory().getName()}"></span>
+				</a></td>
 				<td th:text="${product.getType()}"></td>
-				<td th:text="${product.getPurchasePrice()}"></td>
+				<td th:text="${product.getProductProperties().getPerimeter()}"></td>
+				<td th:text="${product.getProductProperties().getHeight()}"></td>
+				<td th:text="${product.getProductProperties().getWidth()}"></td>
+				<td th:text="${product.getProductProperties().getLength()}"></td>
+				<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
+				<td th:text="${product.getProductProperties().getRate()}"></td>
+				<td th:text="${product.getSellPrice()}"></td>
 				<td th:text="${product.getStatus()}"></td>
 				<td th:text="${product.getNote()}"></td>
+				<td>
+					<span th:text="${product.getCreated()}"></span>
+					<span th:text="${product.getLastUpdated()}"></span>
+				</td>
 				<td><a th:href="@{/invoice/session/remove/}+${product.getId()}">Remove</a></td>
-				<td th:if="${product.getType().equals('Sized')}"><a th:href="@{/invoice/session/edit/}+${product.getId()}">Properties</a></td>
+				<td><a th:href="@{/invoice/session/edit/}+${product.getId()}">Properties</a></td>
 			</tr>
 		</table>
 	</div>
-	
+
+	<br></br><br></br>
+	<div>
+		<form th:action="@{/invoice/create}" method="post">
+
+			Discount: <input type="number" required="required" value="0" min="0" name="discount" placeholder="Discount"></input><br></br>
+			<button type="submit">Generate</button>
+		</form>
+	</div>
+
 </body>
 </html>

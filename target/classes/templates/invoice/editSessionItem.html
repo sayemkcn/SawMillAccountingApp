@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"></meta>
-<title>Edit</title>
+	<meta charset="UTF-8"></meta>
+	<title>Edit</title>
+	<script src="/js/jquery-1.12.4.min.js"></script>
+	<script src="/js/script.js"></script>
 </head>
 <body>
 
@@ -16,7 +18,7 @@
 	
 	<!-- UPDATE PRODUCT -->
 	<form th:if="${product != null}" th:action="@{/invoice/session/edit/}+${product.getId()}" method="post">
-		Add Product:<br></br>
+		Update Product:<br></br>
 		<hr></hr>
 		Serial: <input type="text" name="serial" placeholder="Serial" th:value="${product?.getSerial()}"></input><br></br>
 		Product Type: 
@@ -24,21 +26,23 @@
 			<option th:selected="${product.getType().equals('Round')}" value="Round">Round</option>
 			<option th:selected="${product.getType().equals('Sized')}" value="Sized">Sized</option>
 		</select><br></br>
+		Category:
+		<select name="categoryName" >
+			<option th:each="category:${categoryList}" th:text="${category.getName()}" th:selected="${product?.getCategory()?.getName().equals(category.getName())}"></option>
+		</select>
+		<br></br>
 		Properties:<br></br>
 		<div>
-			Category: <input type="text" name="category" placeholder="Name" th:value="${product?.getCategory()}"></input><br></br>
-			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter" th:value="${product?.getProductProperties()?.getPerimeter()}"></input><br></br>
-			Height: <input type="number" name="productProperties.height" placeholder="Height" th:value="${product?.getProductProperties()?.getHeight()}"></input><br></br>
-			Width: <input type="number" name="productProperties.width" placeholder="Width" th:value="${product?.getProductProperties()?.getWidth()}"></input><br></br>
-			Length: <input type="number" name="productProperties.length" placeholder="Length" th:value="${product?.getProductProperties()?.getLength()}"></input><br></br>
-			Rate: <input type="number" name="productProperties.rate" placeholder="Rate" th:value="${product?.getProductProperties()?.getRate()}"></input><br></br>
+			Perimeter: <input type="number" name="productProperties.perimeter" placeholder="Perimeter" th:value="${product?.getProductProperties()?.getPerimeter()}" required="required"></input><br></br>
+			Height: <input type="number" name="productProperties.height" placeholder="Height" th:value="${product?.getProductProperties()?.getHeight()}" required="required"></input><br></br>
+			Width: <input type="number" name="productProperties.width" placeholder="Width" th:value="${product?.getProductProperties()?.getWidth()}" required="required"></input><br></br>
+			Length: <input type="number" name="productProperties.length" placeholder="Length" th:value="${product?.getProductProperties()?.getLength()}" required="required"></input><br></br>
+			Rate: <input type="number" name="productProperties.rate" placeholder="Rate" th:value="${product?.getProductProperties()?.getRate()}" required="required"></input><br></br>
 		</div>
 		<br></br>
-		Purchase Price:<br></br>
-		<input type="text" name="purchasePrice" placeholder="Purchase Price" th:value="${product?.getPurchasePrice()}"></input><br></br><br></br>
 		Note:<br></br>
 		<textarea type="text" name="note" placeholder="Note" th:text="${product?.getNote()}"></textarea><br></br><br></br>
-		<input type="submit" value="Update Product"></input>
+		<input type="submit" value="Set Properties"></input>
 	</form>
 	
 </body>
