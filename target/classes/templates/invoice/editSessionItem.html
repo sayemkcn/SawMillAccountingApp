@@ -8,11 +8,16 @@
 </head>
 <body>
 
+	<!-- NAV MENU -->
 	<nav>
 		<ul>
 			<li><a th:href="@{/product}">All Products</a></li>
+			<li><a th:href="@{/product/create}">Add Product</a></li>
+			<li><a th:href="@{/invoice}">Invoices</a></li>
+			<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+			<li><a th:href="@{/category}">Categories</a></li>
 		</ul>
-	</nav>
+	</nav><hr></hr><br></br>
 	
 	<span style="color: green;" th:if="${message != null}" th:text="${message}"></span>
 	
@@ -20,7 +25,7 @@
 	<form th:if="${product != null}" th:action="@{/invoice/session/edit/}+${product.getId()}" method="post">
 		Update Product:<br></br>
 		<hr></hr>
-		Serial: <input type="text" name="serial" placeholder="Serial" th:value="${product?.getSerial()}"></input><br></br>
+		Serial: <input type="text" name="serial" placeholder="Serial" th:value="${product?.getSerial()}" required="required"></input><br></br>
 		Product Type: 
 		<select name="type">
 			<option th:selected="${product.getType().equals('Round')}" value="Round">Round</option>

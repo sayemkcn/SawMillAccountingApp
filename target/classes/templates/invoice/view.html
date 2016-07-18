@@ -4,7 +4,19 @@
 <meta charset="UTF-8"></meta>
 <title>Invoice</title>
 </head>
-<body>
+	<body>
+
+		<!-- NAV MENU -->
+		<nav>
+			<ul>
+				<li><a th:href="@{/product}">All Products</a></li>
+				<li><a th:href="@{/product/create}">Add Product</a></li>
+				<li><a th:href="@{/invoice}">Invoices</a></li>
+				<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+				<li><a th:href="@{/category}">Categories</a></li>
+			</ul>
+		</nav><hr></hr><br></br>
+	
 		<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr>
 		Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
 		<div>
@@ -43,12 +55,11 @@
 		Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
 		Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
 		Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
-		Date: <span th:text="${invoice.getCreated()}"></span>
-			  <span th:text="${invoice.getLastUpdated()}"></span><br></br>
+		Date: <span th:text="${invoice.getCreated()}"></span><br></br>
 		Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
 		<br></br>
 		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a>
 		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Complete}">Mark as complete</a><br></br>
 		
-</body>
+	</body>
 </html>

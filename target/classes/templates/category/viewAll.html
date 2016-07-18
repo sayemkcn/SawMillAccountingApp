@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+	<html>
 	<head>
 	<meta charset="UTF-8"></meta>
-	<title>New Category</title>
+	<title>Categories</title>
 	</head>
-	<body>	
-		
+	<body>
 		<!-- NAV MENU -->
 		<nav>
 			<ul>
@@ -16,12 +15,11 @@
 				<li><a th:href="@{/category}">Categories</a></li>
 			</ul>
 		</nav><hr></hr><br></br>
+		
+		<a th:href="@{/category/create}">Create New Category</a><br></br>
+		<ul>
+			<li th:each="category:${categoryList}" th:text="${category.getName()}"></li>
+		</ul>
 	
-		<span th:text="${message}" style="color: green;"></span><hr></hr>
-		New Category:<br></br>
-		<form th:action="@{/category/create}" method="post">
-			<input name="name" placeholder="Enter category name"></input><br></br>
-			<button type="submit" >Add Category</button>
-		</form>
 	</body>
 </html>

@@ -5,11 +5,16 @@
 <title th:text="${product.getCategory()}"></title>
 </head>
 <body>
+	<!-- NAV MENU -->
 	<nav>
 		<ul>
 			<li><a th:href="@{/product}">All Products</a></li>
+			<li><a th:href="@{/product/create}">Add Product</a></li>
+			<li><a th:href="@{/invoice}">Invoices</a></li>
+			<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+			<li><a th:href="@{/category}">Categories</a></li>
 		</ul>
-	</nav>
+	</nav><hr></hr><br></br>
 
 	<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr><br></br>
 	Product Details:<hr></hr>

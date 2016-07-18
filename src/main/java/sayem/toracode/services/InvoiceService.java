@@ -36,15 +36,16 @@ public class InvoiceService {
 			// subtract selling product property items for remaining product
 			ProductProperties properties = product.getProductProperties();
 			ProductProperties sProperties = sellingProduct.getProductProperties();
-			properties.setHeight(properties.getHeight()-sProperties.getHeight());
-			properties.setWidth(properties.getWidth()-sProperties.getWidth());
-			properties.setLength(properties.getLength()-sProperties.getLength());
-			properties.setPerimeter(properties.getPerimeter()-sProperties.getPerimeter());
+			properties.setHeight(properties.getHeight() - sProperties.getHeight());
+			properties.setWidth(properties.getWidth() - sProperties.getWidth());
+			properties.setLength(properties.getLength() - sProperties.getLength());
+			properties.setPerimeter(properties.getPerimeter() - sProperties.getPerimeter());
 			System.out.println(properties.toString());
 			product.setProductProperties(properties);
-			if (properties.getLength() <= 0) {
+			if (properties.getLength() <= 0 && properties.getPerimeter() <= 0 && properties.getHeight() <= 0
+					&& properties.getWidth() <= 0) {
 				product.setStatus("Sold Out");
-			}else {
+			} else {
 				product.setStatus("Partially Sold");
 			}
 			productList.add(product);
@@ -58,6 +59,10 @@ public class InvoiceService {
 
 	public InvoiceEntity findById(Long id) {
 		return invoiceRepository.findOne(id);
+	}
+
+	public List<InvoiceEntity> findAll() {
+		return invoiceRepository.findAll();
 	}
 
 }

@@ -17,6 +17,12 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
+	
+	@RequestMapping(value="",method=RequestMethod.GET)
+	private String showCategories(Model model){
+		model.addAttribute("categoryList",categoryService.findAll());
+		return "category/viewAll";
+	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String addNewCategoryPage() {

@@ -5,16 +5,33 @@
 <title>Invoice List</title>
 </head>
 <body>
+
+	<!-- NAV MENU -->
+	<nav>
+		<ul>
+			<li><a th:href="@{/product}">All Products</a></li>
+			<li><a th:href="@{/product/create}">Add Product</a></li>
+			<li><a th:href="@{/invoice}">Invoices</a></li>
+			<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+			<li><a th:href="@{/category}">Categories</a></li>
+		</ul>
+	</nav><hr></hr><br></br>
 	
 	<div>
-		<a th:href="@{/invoice/create}">Generate Invoice</a>
-		<table>
+		<table border="1px">
+			<tr>
+				<th>Invoice ID</th>
+				<th>Product Names</th>
+				<th>Discount</th>
+			</tr>
 			<tr th:each="invoice:${invoiceList}">
-				<td><span th:text="${invoice.getProductCategory()}"></span></td>
-				<td><span th:text="${invoice.getDiscount()}"></span></td>
-				<td th:each="product:${invoice.getProductList()}">
-					<a th:href="@{/product/}+${product.getId()}"><span th:text="${product.getProductProperties().getName()}"></span></a>
+				<td><span th:text="${invoice.getId()}"></span></td>
+				<td>
+					<a th:href="@{/invoice/}+${invoice.getId()}">
+						<span th:each="product:${invoice.getProductList()}" th:text="${'('+product.getSerial()+')'}"></span>
+					</a>
 				</td>
+				<td><span th:text="${invoice.getDiscount()}"></span></td>	
 			</tr>
 		</table>
 	</div>

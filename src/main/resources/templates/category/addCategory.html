@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8"></meta>
-<title>New Category</title>
-</head>
-<body>	
+	<head>
+	<meta charset="UTF-8"></meta>
+	<title>New Category</title>
+	</head>
+	<body>	
+		
+		<!-- NAV MENU -->
+		<nav>
+			<ul>
+				<li><a th:href="@{/product}">All Products</a></li>
+				<li><a th:href="@{/product/create}">Add Product</a></li>
+				<li><a th:href="@{/invoice}">Invoices</a></li>
+				<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+				<li><a th:href="@{/category}">Categories</a></li>
+			</ul>
+		</nav><hr></hr><br></br>
+	
 		<span th:text="${message}" style="color: green;"></span><hr></hr>
 		New Category:<br></br>
 		<form th:action="@{/category/create}" method="post">
 			<input name="name" placeholder="Enter category name"></input><br></br>
 			<button type="submit" >Add Category</button>
 		</form>
-</body>
+	</body>
 </html>

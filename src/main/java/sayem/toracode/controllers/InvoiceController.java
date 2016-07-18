@@ -41,7 +41,7 @@ public class InvoiceController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String showAll(Model model) {
-		model.addAttribute("invoiceList", invoiceRepository.findAll());
+		model.addAttribute("invoiceList", invoiceService.findAll());
 		return "invoice/viewAll";
 	}
 	
