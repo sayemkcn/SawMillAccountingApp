@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title>Invoice</title>
+	<script type="text/javascript">
+		function showPrintPrompt(){
+			var prtContent = document.getElementById("invoiceContent");
+			var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+			WinPrint.document.write(prtContent.innerHTML);
+			WinPrint.document.close();
+			WinPrint.focus();
+			WinPrint.print();
+			WinPrint.close();
+		}
+	</script>
+	
 </head>
 	<body>
 
@@ -18,48 +30,51 @@
 		</nav><hr></hr><br></br>
 	
 		<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr>
-		Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
-		<div>
-			Total Products: <span th:text="${invoice.getProductList().size()}"></span> 
-			<hr></hr>
-			<table border="1px">
-			
-				<tr>
-					<th>Serial Number</th>
-					<th>Category</th>
-					<th>Type</th>
-					<th>Perimeter</th>
-					<th>Height</th>
-					<th>Width</th>
-					<th>Length</th>
-					<th>Size</th>
-					<th>Rate</th>
-					<th>Price</th>
-				</tr>
-				<tr th:each="product:${invoice.getProductList()}">
-					<td th:text="${product.getSerial()}"></td>
-					<td th:text="${product.getCategory().getName()}"></td>
-					<td th:text="${product.getType()}"></td>
-					<td th:text="${product.getProductProperties().getPerimeter()}"></td>
-					<td th:text="${product.getProductProperties().getHeight()}"></td>
-					<td th:text="${product.getProductProperties().getWidth()}"></td>
-					<td th:text="${product.getProductProperties().getLength()}"></td>
-					<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
-					<td th:text="${product.getProductProperties().getRate()}"></td>
-					<td th:text="${product.getSellPrice()}"></td>
-				</tr>
-			</table>
-			
+		<div id="invoiceContent">
+			<div>
+				Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
+				Total Products: <span th:text="${invoice.getProductList().size()}"></span> 
+				<hr></hr>
+				<table border="1px">
+				
+					<tr>
+						<th>Serial Number</th>
+						<th>Category</th>
+						<th>Type</th>
+						<th>Perimeter</th>
+						<th>Height</th>
+						<th>Width</th>
+						<th>Length</th>
+						<th>Size</th>
+						<th>Rate</th>
+						<th>Price</th>
+					</tr>
+					<tr th:each="product:${invoice.getProductList()}">
+						<td th:text="${product.getSerial()}"></td>
+						<td th:text="${product.getCategory().getName()}"></td>
+						<td th:text="${product.getType()}"></td>
+						<td th:text="${product.getProductProperties().getPerimeter()}"></td>
+						<td th:text="${product.getProductProperties().getHeight()}"></td>
+						<td th:text="${product.getProductProperties().getWidth()}"></td>
+						<td th:text="${product.getProductProperties().getLength()}"></td>
+						<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
+						<td th:text="${product.getProductProperties().getRate()}"></td>
+						<td th:text="${product.getSellPrice()}"></td>
+					</tr>
+				</table>
+				
+			</div>
+			<br></br><br></br>
+			Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
+			Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
+			Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
+			Date: <span th:text="${invoice.getCreated()}"></span><br></br>
+			Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
 		</div>
-		<br></br><br></br>
-		Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
-		Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
-		Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
-		Date: <span th:text="${invoice.getCreated()}"></span><br></br>
-		Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
 		<br></br>
-		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a>
+		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a><br></br>
 		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Complete}">Mark as complete</a><br></br>
+		<button id="printButton" onclick="showPrintPrompt()">Print</button>
 		
 	</body>
 </html>
