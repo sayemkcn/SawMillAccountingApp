@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Invoice</title>
+</head>
+<body>
+		<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr>
+		Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
+		<div>
+			Total Products: <span th:text="${invoice.getProductList().size()}"></span> 
+			<hr></hr>
+			<table border="1px">
+			
+				<tr>
+					<th>Serial Number</th>
+					<th>Category</th>
+					<th>Type</th>
+					<th>Perimeter</th>
+					<th>Height</th>
+					<th>Width</th>
+					<th>Length</th>
+					<th>Size</th>
+					<th>Rate</th>
+					<th>Price</th>
+				</tr>
+				<tr th:each="product:${invoice.getProductList()}">
+					<td th:text="${product.getSerial()}"></td>
+					<td th:text="${product.getCategory().getName()}"></td>
+					<td th:text="${product.getType()}"></td>
+					<td th:text="${product.getProductProperties().getPerimeter()}"></td>
+					<td th:text="${product.getProductProperties().getHeight()}"></td>
+					<td th:text="${product.getProductProperties().getWidth()}"></td>
+					<td th:text="${product.getProductProperties().getLength()}"></td>
+					<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
+					<td th:text="${product.getProductProperties().getRate()}"></td>
+					<td th:text="${product.getSellPrice()}"></td>
+				</tr>
+			</table>
+			
+		</div>
+		<br></br><br></br>
+		Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
+		Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
+		Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
+		Date: <span th:text="${invoice.getCreated()}"></span>
+			  <span th:text="${invoice.getLastUpdated()}"></span><br></br>
+		Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
+		<br></br>
+		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a>
+		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Complete}">Mark as complete</a><br></br>
+		
+</body>
+</html>

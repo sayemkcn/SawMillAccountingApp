@@ -1,16 +1,19 @@
-package sayem.toracode.entities;
+package sayem.toracode.pojo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import sayem.toracode.entities.CategoryEntity;
+import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.pojo.ProductProperties;
 
-@Entity(name = "products")
-public class ProductEntity extends BaseEntity {
+@Embeddable
+public class InvoiceProduct {
 	private String serial;
 	private String type;
 	@Transient
@@ -94,6 +97,24 @@ public class ProductEntity extends BaseEntity {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+	public static List<InvoiceProduct> copyList(List<ProductEntity> sellingProductList) {
+		List<InvoiceProduct> productList = new ArrayList<>();
+		for (ProductEntity productEntity : sellingProductList) {
+			InvoiceProduct product = new InvoiceProduct();
+			product.setCategory(productEntity.getCategory());
+			product.setCategoryName(productEntity.getCategoryName());
+			product.setNote(productEntity.getNote());
+			product.setProductProperties(productEntity.getProductProperties());
+			product.setPurchasePrice(productEntity.getPurchasePrice());
+			product.setSellPrice(productEntity.getSellPrice());
+			product.setSerial(productEntity.getSerial());
+			product.setStatus(productEntity.getStatus());
+			product.setType(productEntity.getType());
+			productList.add(product);
+		}
+		return productList;
 	}
 
 }

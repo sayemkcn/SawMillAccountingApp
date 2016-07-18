@@ -1,12 +1,9 @@
 package sayem.toracode.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
-import sayem.toracode.repositories.CategoryRepository;
 import sayem.toracode.repositories.ProductRepository;
 import sayem.toracode.services.CategoryService;
 
@@ -42,7 +38,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String addProductForm(Model model) {
-		model.addAttribute("categoryList",categoryService.findAll());
+		model.addAttribute("categoryList", categoryService.findAll());
 		return "product/addProduct";
 	}
 
@@ -53,7 +49,7 @@ public class ProductController {
 		} else {
 			// calculate purchase price and save into database
 			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
-			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
+			productEntity.setPurchasePrice((long) (productSize * productEntity.getProductProperties().getRate()));
 			// find category with category name and save it to product object
 			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
 			productEntity.setCategory(category);
@@ -66,7 +62,7 @@ public class ProductController {
 	public String updateProductForm(@PathVariable("id") Long id, Model model) {
 		ProductEntity productEntity = productRepository.findOne(id);
 		model.addAttribute("product", productEntity);
-		model.addAttribute("categoryList",categoryService.findAll());
+		model.addAttribute("categoryList", categoryService.findAll());
 		return "product/addProduct";
 	}
 
@@ -79,7 +75,7 @@ public class ProductController {
 			productEntity.setId(id);
 			// calculate purchase price and save into database
 			double productSize = productEntity.getProductProperties().getSize(productEntity.getType());
-			productEntity.setPurchasePrice((long) (productSize*productEntity.getProductProperties().getRate()));
+			productEntity.setPurchasePrice((long) (productSize * productEntity.getProductProperties().getRate()));
 			// find category with category name and save it to product object
 			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
 			productEntity.setCategory(category);

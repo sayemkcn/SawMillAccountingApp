@@ -43,4 +43,8 @@ public class ProductService {
 	public long calculatePrice(ProductEntity product){
 		return (long) (product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate());
 	}
+
+	public void saveProductList(List<ProductEntity> remainingProductList) {
+		productRepository.save(remainingProductList);
+	}
 }

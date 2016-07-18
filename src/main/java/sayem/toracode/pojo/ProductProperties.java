@@ -85,4 +85,12 @@ public class ProductProperties {
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
+
+	@Override
+	public String toString() {
+		return "ProductProperties [length=" + length + ", perimeter=" + perimeter + ", height=" + height + ", width="
+				+ width + ", rate=" + rate + "]";
+	}
+	
+	
 }

@@ -1,32 +1,19 @@
 package sayem.toracode.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+
+import sayem.toracode.pojo.InvoiceProduct;
 
 @Entity(name = "invoices")
 public class InvoiceEntity extends BaseEntity {
-	private String productCategory;
-	@OneToMany
-	private List<ProductEntity> productList;
+	@ElementCollection
+	private List<InvoiceProduct> productList = new ArrayList<>();
 	private long discount;
-
-	public String getProductCategory() {
-		return productCategory;
-	}
-
-	public void setProductCategory(String productCategory) {
-		this.productCategory = productCategory;
-	}
-
-	public List<ProductEntity> getProductList() {
-		return productList;
-	}
-
-	public void setProductList(List<ProductEntity> productList) {
-		this.productList = productList;
-	}
+	private String status;
 
 	public long getDiscount() {
 		return discount;
@@ -36,4 +23,27 @@ public class InvoiceEntity extends BaseEntity {
 		this.discount = discount;
 	}
 
+	public List<InvoiceProduct> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<InvoiceProduct> productList) {
+		this.productList = productList;
+	}
+	
+	public Long getTotalPrice(List<InvoiceProduct> productList){
+		long price = 0;
+		for(InvoiceProduct product: productList){
+			price+=product.getSellPrice();
+		}
+		return price;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

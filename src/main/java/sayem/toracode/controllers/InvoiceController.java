@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import sayem.toracode.entities.CategoryEntity;
+import sayem.toracode.entities.InvoiceEntity;
 import sayem.toracode.entities.ProductEntity;
+import sayem.toracode.pojo.InvoiceProduct;
 import sayem.toracode.repositories.InvoiceRepository;
-import sayem.toracode.repositories.ProductRepository;
 import sayem.toracode.services.CategoryService;
 import sayem.toracode.services.InvoiceService;
 import sayem.toracode.services.ProductService;
@@ -44,7 +44,21 @@ public class InvoiceController {
 		model.addAttribute("invoiceList", invoiceRepository.findAll());
 		return "invoice/viewAll";
 	}
-
+	
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
+	public String showInvoice(@PathVariable("id") Long id,Model model){
+		model.addAttribute("invoice",invoiceService.findById(id));
+		return "invoice/view";
+	}
+	
+	@RequestMapping(value="/edit/{id}",method=RequestMethod.GET)
+	public String editInvoice(@PathVariable("id") Long id,@RequestParam("status") String status){
+		InvoiceEntity invoice = invoiceService.findById(id);
+		invoice.setStatus(status);
+		invoiceService.saveInvoice(invoice);
+		return "redirect:/invoice/"+id+"?message=Invoice marked as "+status+"!";
+	}
+	
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String createInvoicePage(@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "serial", required = false) String serialNumber, Model model) {
@@ -68,8 +82,26 @@ public class InvoiceController {
 		if (sellingProductList == null || sellingProductList.isEmpty()) {
 			return "redirect:/invoice/create?message=No product selected yet!";
 		}
+		// calculate the total selling price
 		long sellPrice = invoiceService.calculatePrice(sellingProductList, discount);
-		return "redirect:/invoice/create?message=" + sellPrice;
+		// find and save remaining product
+		List<ProductEntity> remainingProductList = invoiceService.calculateRemainingProducts(sellingProductList);
+		if (!remainingProductList.isEmpty()) {
+			productService.saveProductList(remainingProductList);
+		}
+		// remove session items after transaction
+		session.removeAttribute(SESSION_ATTRIBUTE);
+		// create invoice
+		InvoiceEntity invoice = new InvoiceEntity();
+		invoice.setDiscount(discount);
+		// copy selling product List<ProductEntity>  to List<Product> because Product is not entity and not the same object
+		// as products are being sold partially
+		List<InvoiceProduct> invoiceProductList = InvoiceProduct.copyList(sellingProductList);
+		invoice.setProductList(invoiceProductList);
+		invoice.setStatus("Pending..");
+		// store returned invoice cause it has generated id
+		invoice = invoiceService.saveInvoice(invoice);
+		return "redirect:/invoice/"+invoice.getId()+"?message=" + "Successfully generated new invoice";
 	}
 
 	// add selected item to session
@@ -140,16 +172,16 @@ public class InvoiceController {
 		List<ProductEntity> productList = (List<ProductEntity>) session
 				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
 
-		// remove existing product from list
-		try {
-			for (ProductEntity prod : productList) {
-				if (prod.getId() == id) {
-					productList.remove(prod);
-				}
-			}
-		} catch (ConcurrentModificationException e) {
-			// Fuck off
-		}
+//		// remove existing product from list
+//		try {
+//			for (ProductEntity prod : productList) {
+//				if (prod.getId() == id) {
+//					productList.remove(prod);
+//				}
+//			}
+//		} catch (ConcurrentModificationException e) {
+//			// Fuck off
+//		}
 
 		// add edited product object to list
 		product.setId(id);
@@ -157,7 +189,11 @@ public class InvoiceController {
 		CategoryEntity category = categoryService.findByName(product.getCategoryName());
 		product.setCategory(category);
 		product.setSellPrice(productService.calculatePrice(product));
-		productList.add(product);
+		for (int i = 0; i < productList.size(); i++) {
+			if (productList.get(i).getId()==id) {
+				productList.set(i, product);
+			}
+		}
 
 		// finally set session attribute
 		session.setAttribute(InvoiceController.SESSION_ATTRIBUTE, productList);
