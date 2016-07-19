@@ -1,5 +1,7 @@
 package sayem.toracode.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,11 +10,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.repositories.ProductRepository;
 import sayem.toracode.services.CategoryService;
+import sayem.toracode.services.ProductService;
 
 @Controller
 @RequestMapping(value = "/product")
@@ -22,6 +28,8 @@ public class ProductController {
 	private ProductRepository productRepository;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private ProductService productService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	private String showProducts(Model model) {
@@ -95,4 +103,19 @@ public class ProductController {
 		return "redirect:/product";
 	}
 
+	
+	// Import from spreadsheet
+	@RequestMapping(value="/import",method=RequestMethod.POST)
+	public String importFile(@RequestParam("importFile") MultipartFile file){
+		if (!file.isEmpty()) {
+			List<ProductEntity> productList = productService.extractData(file);
+			try{
+				productService.saveProductList(productList);
+				return "redirect:/product/create?message=Successfully imported products!";
+			}catch(Exception e){
+				return "redirect:/product/create?message="+e.getMessage();
+			}
+		}
+		return "redirect:/product/create?message=File can not be empty.";
+	}
 }

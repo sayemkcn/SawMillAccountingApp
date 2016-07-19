@@ -96,4 +96,12 @@ public class ProductEntity extends BaseEntity {
 		this.categoryName = categoryName;
 	}
 
+	@Override
+	public String toString() {
+		return "ProductEntity [serial=" + serial + ", type=" + type + ", categoryName=" + categoryName + ", category="
+				+ category + ", productProperties=" + productProperties + ", purchasePrice=" + purchasePrice
+				+ ", sellPrice=" + sellPrice + ", status=" + status + ", note=" + note + "]";
+	}
+
+	
 }

@@ -82,5 +82,12 @@
 		<input type="submit" value="Add Product"></input>
 	</form>
 	
+	Or,
+	<br></br><br></br>
+	<form th:action="@{/product/import}" method="post" enctype="multipart/form-data">
+		Import from Excel: <input type="file" name="importFile"></input><br></br>
+		<button type="submit">Import</button>
+	</form>
+	
 </body>
 </html>
