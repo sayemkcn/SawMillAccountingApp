@@ -24,12 +24,12 @@
 						<li><a th:href="@{/invoice}">Invoices</a></li>
 						<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
 						<li><a th:href="@{/category}">Categories</a></li>
+						<li><a th:href="@{/partner}">My Partners</a></li>
 					</ul>
 				</div>
 				
-			</nav><hr></hr><br></br>
-		
-			<span style="color: green;" th:if="${param.message != null}" th:text="${param.message[0]}"></span>
+			</nav>
+			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
 		</header>
 	
 	<div class="container-fluid">
@@ -90,7 +90,13 @@
 						Width: <input type="number" name="productProperties.width" id="width" value="0" placeholder="Width" required="required" ></input><br></br>
 						Length: <input type="number" name="productProperties.length" id="length" value="0" placeholder="Length" required="required"></input><br></br>
 						Rate: <input type="number" name="productProperties.rate" placeholder="Rate" required="required"></input><br></br>
-					</div>
+					</div><br></br>
+					Supplier Name:<br></br>
+					<select name="supplierId">
+						<option th:each="partner:${partnerList}" th:value="${partner.getId()}">
+							<span th:text="${partner.getName()}+' - '+${partner.getAddress()}"></span>
+						</option>
+					</select><a th:href="@{/partner/create}">Create New Supplier</a>
 					<br></br>
 					Note:<br></br>
 					<textarea type="text" name="note" placeholder="Note" ></textarea><br></br><br></br>

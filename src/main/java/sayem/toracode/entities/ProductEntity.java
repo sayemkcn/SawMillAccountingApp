@@ -1,5 +1,6 @@
 package sayem.toracode.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -23,6 +24,8 @@ public class ProductEntity extends BaseEntity {
 	private long sellPrice;
 	private String status;
 	private String note;
+	@ManyToOne
+	private BusinessPartnerEntity businessPartner;
 
 	public String getSerial() {
 		return serial;
@@ -101,6 +104,14 @@ public class ProductEntity extends BaseEntity {
 		return "ProductEntity [serial=" + serial + ", type=" + type + ", categoryName=" + categoryName + ", category="
 				+ category + ", productProperties=" + productProperties + ", purchasePrice=" + purchasePrice
 				+ ", sellPrice=" + sellPrice + ", status=" + status + ", note=" + note + "]";
+	}
+
+	public BusinessPartnerEntity getBusinessPartner() {
+		return businessPartner;
+	}
+
+	public void setBusinessPartner(BusinessPartnerEntity businessPartner) {
+		this.businessPartner = businessPartner;
 	}
 
 	

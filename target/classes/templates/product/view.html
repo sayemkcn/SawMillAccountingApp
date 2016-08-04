@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"></meta>
-<title th:text="${product.getCategory()}"></title>
+	<meta charset="UTF-8"></meta>
+	<title th:text="${product.getCategory()}"></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+	<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 </head>
 <body>
-	<!-- NAV MENU -->
-	<nav>
-		<ul>
-			<li><a th:href="@{/product}">All Products</a></li>
-			<li><a th:href="@{/product/create}">Add Product</a></li>
-			<li><a th:href="@{/invoice}">Invoices</a></li>
-			<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
-			<li><a th:href="@{/category}">Categories</a></li>
-		</ul>
-	</nav><hr></hr><br></br>
+		<header class="container-fluid">
+			<!-- NAV MENU -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li><a th:href="@{/product}">All Products</a></li>
+						<li><a th:href="@{/product/create}">Add Product</a></li>
+						<li><a th:href="@{/invoice}">Invoices</a></li>
+						<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+						<li><a th:href="@{/category}">Categories</a></li>
+						<li><a th:href="@{/partner}">My Partners</a></li>
+					</ul>
+				</div>
+				
+			</nav>
+			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
+		</header>
 
 	<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr><br></br>
 	Product Details:<hr></hr>
 	<div th:if="${product != null}">
-		Serial No: <span th:text="${product.getSerial()}"></span><br></br>
-		Product Type: <span th:text="${product.getType()}"></span><br></br>
-		Category: <span th:text="${product.getCategory().getName()}"></span><br></br>
-		Perimeter: <span th:text="${product.getProductProperties().getPerimeter()}"></span><br></br>
-		Height: <span th:text="${product.getProductProperties().getHeight()}"></span><br></br>
-		Width: <span th:text="${product.getProductProperties().getWidth()}"></span><br></br>		
-		Length: <span th:text="${product.getProductProperties().getLength()}"></span><br></br>
-		Rate: <span th:text="${product.getProductProperties().getRate()}"></span><br></br>
-		Size: <span th:text="${product.getProductProperties().getSize(product.getType())}"></span><br></br>
-		Purchase Price: <span th:text="${product.getPurchasePrice()}"></span><br></br>
-		Sell Price: <span th:text="${product.getSellPrice()}"></span><br></br>
-		Status: <span th:text="${product.getStatus()}"></span><br></br>
-		Note: <span th:text="${product.getNote()}"></span><br></br>
+		
+		<div th:if="${product.getBusinessPartner()!=null}">
+			Supplier Name:<span th:text="${product.getBusinessPartner().getName()}"></span><br></br>
+			Supplier Address:<span th:text="${product.getBusinessPartner().getAddress()}"></span><br></br>
+		</div><hr></hr>
+	
+		<div>
+			Serial No: <span th:text="${product.getSerial()}"></span><br></br>
+			Product Type: <span th:text="${product.getType()}"></span><br></br>
+			Category: <span th:text="${product.getCategory().getName()}"></span><br></br>
+			Perimeter: <span th:text="${product.getProductProperties().getPerimeter()}"></span><br></br>
+			Height: <span th:text="${product.getProductProperties().getHeight()}"></span><br></br>
+			Width: <span th:text="${product.getProductProperties().getWidth()}"></span><br></br>		
+			Length: <span th:text="${product.getProductProperties().getLength()}"></span><br></br>
+			Rate: <span th:text="${product.getProductProperties().getRate()}"></span><br></br>
+			Size: <span th:text="${product.getProductProperties().getSize(product.getType())}"></span><br></br>
+			Purchase Price: <span th:text="${product.getPurchasePrice()}"></span><br></br>
+			Sell Price: <span th:text="${product.getSellPrice()}"></span><br></br>
+			Status: <span th:text="${product.getStatus()}"></span><br></br>
+			Note: <span th:text="${product.getNote()}"></span><br></br>
+		</div>
 		
 		<a th:href="@{/product/update/}+${product.getId()}">Edit</a>
 		<a th:href="@{/product/delete/}+${product.getId()}">Delete</a>

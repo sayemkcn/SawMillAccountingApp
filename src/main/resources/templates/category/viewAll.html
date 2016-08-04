@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 	<html>
 	<head>
-	<meta charset="UTF-8"></meta>
-	<title>Categories</title>
+		<meta charset="UTF-8"></meta>
+		<title>Categories</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+		<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 	</head>
 	<body>
-		<!-- NAV MENU -->
-		<nav>
-			<ul>
-				<li><a th:href="@{/product}">All Products</a></li>
-				<li><a th:href="@{/product/create}">Add Product</a></li>
-				<li><a th:href="@{/invoice}">Invoices</a></li>
-				<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
-				<li><a th:href="@{/category}">Categories</a></li>
-			</ul>
-		</nav><hr></hr><br></br>
+		<header class="container-fluid">
+			<!-- NAV MENU -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li><a th:href="@{/product}">All Products</a></li>
+						<li><a th:href="@{/product/create}">Add Product</a></li>
+						<li><a th:href="@{/invoice}">Invoices</a></li>
+						<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+						<li><a th:href="@{/category}">Categories</a></li>
+						<li><a th:href="@{/partner}">My Partners</a></li>
+					</ul>
+				</div>
+				
+			</nav>
+		</header>
 		
 		<a th:href="@{/category/create}">Create New Category</a><br></br>
 		<ul>

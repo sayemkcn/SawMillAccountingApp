@@ -19,6 +19,10 @@ public class BusinessPartnerService {
 		return businessPartnerRepository.save(partner);
 	}
 	
+	public List<BusinessPartnerEntity> findAll(){
+		return businessPartnerRepository.findAll();
+	}
+	
 	public List<BusinessPartnerEntity> findAllCustomers(){
 		return businessPartnerRepository.findByType(BusinessPartnerEntity.PARTNER_TYPE_CUSTOMER);
 	}

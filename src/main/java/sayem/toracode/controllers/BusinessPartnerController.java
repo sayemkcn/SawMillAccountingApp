@@ -17,22 +17,29 @@ public class BusinessPartnerController {
 	@Autowired
 	private BusinessPartnerService partnerService;
 
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String getAllPartners(Model model) {
+		model.addAttribute("partnerList", partnerService.findAll());
+		return "partner/viewAll";
+	}
+
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String createPartnerPage() {
 		return "partner/createPartner";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createPartner(@ModelAttribute BusinessPartnerEntity partner, BindingResult bindingResult, Model model) {
+	public String createPartner(@ModelAttribute BusinessPartnerEntity partner, BindingResult bindingResult,
+			Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("message", bindingResult.toString());
 			return "partner/createPartner";
 		}
 		try {
 			partnerService.save(partner);
-			return "redirect:/partner?message=Successfully created partner!";
+			return "redirect:/partner?message=Successfully created " + partner.getType() + "!";
 		} catch (Exception e) {
-			model.addAttribute("message",e.toString());
+			model.addAttribute("message", e.toString());
 			return "partner/createPartner";
 		}
 	}

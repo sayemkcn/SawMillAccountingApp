@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8"></meta>
-	<title>Create Partner</title>
+	<title>Partners</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
 	<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 </head>
 <body>
+	
 	<header class="container-fluid">
 			<!-- NAV MENU -->
 			<nav class="navbar navbar-default">
@@ -27,16 +28,26 @@
 			</nav>
 			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
 		</header>
-		
-	<form th:action="@{/partner/create}" method="post">
-		Name: <input type="text" name="name" placeholder="Name"></input><br></br>
-		Address: <input type="text" name="address" placeholder="Address"></input><br></br>
-		Role: <select name="type">
-				<option value="customer">Customer</option>
-				<option value="supplier">Supplier</option>
-			</select><br></br>
-			<input type="submit" value="Create"></input>
-	</form>
-	
+
+	<h3>My Business Partners</h3>
+	<hr></hr>
+	<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><br></br>
+	<div>
+		<a th:href="@{/partner/create}">Create New</a>
+		<table border="1px">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Address</th>
+			</tr>
+			<tr th:each="partner:${partnerList}">
+				<td th:text="${partner.getId()}"></td>
+				<td th:text="${partner.getName()}"></td>
+				<td th:text="${partner.getType()}"></td>
+				<td th:text="${partner.getAddress()}"></td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

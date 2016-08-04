@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.repositories.ProductRepository;
+import sayem.toracode.services.BusinessPartnerService;
 import sayem.toracode.services.CategoryService;
 import sayem.toracode.services.ProductService;
 
@@ -30,6 +31,8 @@ public class ProductController {
 	private CategoryService categoryService;
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private BusinessPartnerService businessPartnerService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	private String showProducts(Model model) {
@@ -47,11 +50,12 @@ public class ProductController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String addProductForm(Model model) {
 		model.addAttribute("categoryList", categoryService.findAll());
+		model.addAttribute("partnerList",businessPartnerService.findAllSuppliers());
 		return "product/addProduct";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String addProduct(@ModelAttribute ProductEntity productEntity, BindingResult bindingResult) {
+	public String addProduct(@RequestParam("supplierId") Long supplierId,@ModelAttribute ProductEntity productEntity, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
 		} else {
@@ -61,6 +65,8 @@ public class ProductController {
 			// find category with category name and save it to product object
 			CategoryEntity category = categoryService.findByName(productEntity.getCategoryName());
 			productEntity.setCategory(category);
+			// set Supplier with product
+			productEntity.setBusinessPartner(businessPartnerService.findById(supplierId));
 			productRepository.saveAndFlush(productEntity);
 		}
 		return "redirect:/product/create?message=Successfully saved!";
