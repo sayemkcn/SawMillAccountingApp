@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import sayem.toracode.pojo.InvoiceProduct;
 
@@ -14,6 +15,16 @@ public class InvoiceEntity extends BaseEntity {
 	private List<InvoiceProduct> productList = new ArrayList<>();
 	private long discount;
 	private String status;
+	@ManyToOne
+	private BusinessPartnerEntity businessPartner;
+
+	public BusinessPartnerEntity getBusinessPartner() {
+		return businessPartner;
+	}
+
+	public void setBusinessPartner(BusinessPartnerEntity businessPartner) {
+		this.businessPartner = businessPartner;
+	}
 
 	public long getDiscount() {
 		return discount;

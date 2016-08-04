@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Create Partner</title>
+</head>
+<body>
+	
+	<form th:action="@{/partner/create}" method="post">
+		Name: <input type="text" name="name" placeholder="Name"></input><br></br>
+		Address: <input type="text" name="address" placeholder="Address"></input><br></br>
+		Role: <select name="type">
+				<option value="customer">Customer</option>
+				<option value="supplier">Supplier</option>
+			</select><br></br>
+			<input type="submit" value="Create"></input>
+	</form>
+	
+</body>
+</html>

@@ -20,6 +20,7 @@ import sayem.toracode.entities.InvoiceEntity;
 import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.pojo.InvoiceProduct;
 import sayem.toracode.repositories.InvoiceRepository;
+import sayem.toracode.services.BusinessPartnerService;
 import sayem.toracode.services.CategoryService;
 import sayem.toracode.services.InvoiceService;
 import sayem.toracode.services.ProductService;
@@ -29,13 +30,13 @@ import sayem.toracode.services.ProductService;
 public class InvoiceController {
 
 	@Autowired
-	private InvoiceRepository invoiceRepository;
-	@Autowired
 	private ProductService productService;
 	@Autowired
 	private InvoiceService invoiceService;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private BusinessPartnerService partnerService;
 
 	private static final String SESSION_ATTRIBUTE = "productList";
 
@@ -44,21 +45,22 @@ public class InvoiceController {
 		model.addAttribute("invoiceList", invoiceService.findAll());
 		return "invoice/viewAll";
 	}
-	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public String showInvoice(@PathVariable("id") Long id,Model model){
-		model.addAttribute("invoice",invoiceService.findById(id));
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String showInvoice(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("invoice", invoiceService.findById(id));
 		return "invoice/view";
 	}
-	
-	@RequestMapping(value="/edit/{id}",method=RequestMethod.GET)
-	public String editInvoice(@PathVariable("id") Long id,@RequestParam("status") String status){
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String editInvoice(@PathVariable("id") Long id, @RequestParam("status") String status) {
 		InvoiceEntity invoice = invoiceService.findById(id);
 		invoice.setStatus(status);
 		invoiceService.saveInvoice(invoice);
-		return "redirect:/invoice/"+id+"?message=Invoice marked as "+status+"!";
+		return "redirect:/invoice/" + id + "?message=Invoice marked as " + status + "!";
 	}
-	
+
+	// generate invoice screen
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String createInvoicePage(@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "serial", required = false) String serialNumber, Model model) {
@@ -72,11 +74,14 @@ public class InvoiceController {
 			model.addAttribute("productType", type);
 			model.addAttribute("productList", productService.findProductByType(type));
 		}
+		// return partner list
+		model.addAttribute("partnerList", partnerService.findAllCustomers());
+
 		return "invoice/addInvoice";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createInvoice(@RequestParam("discount") long discount, HttpSession session, Model model) {
+	public String createInvoice(@RequestParam("discount") long discount,@RequestParam("customerId") long customerId, HttpSession session, Model model) {
 		List<ProductEntity> sellingProductList = (List<ProductEntity>) session
 				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
 		if (sellingProductList == null || sellingProductList.isEmpty()) {
@@ -94,14 +99,17 @@ public class InvoiceController {
 		// create invoice
 		InvoiceEntity invoice = new InvoiceEntity();
 		invoice.setDiscount(discount);
-		// copy selling product List<ProductEntity>  to List<Product> because Product is not entity and not the same object
+		// copy selling product List<ProductEntity> to List<Product> because
+		// Product is not entity and not the same object
 		// as products are being sold partially
 		List<InvoiceProduct> invoiceProductList = InvoiceProduct.copyList(sellingProductList);
 		invoice.setProductList(invoiceProductList);
 		invoice.setStatus("Pending..");
+		// set associated customer
+		invoice.setBusinessPartner(partnerService.findById(customerId));
 		// store returned invoice cause it has generated id
 		invoice = invoiceService.saveInvoice(invoice);
-		return "redirect:/invoice/"+invoice.getId()+"?message=" + "Successfully generated new invoice";
+		return "redirect:/invoice/" + invoice.getId() + "?message=" + "Successfully generated new invoice";
 	}
 
 	// add selected item to session
@@ -116,6 +124,8 @@ public class InvoiceController {
 			model.addAttribute("productType", type);
 			model.addAttribute("productList", productService.findProductByType(type));
 		}
+		// return partner list
+		model.addAttribute("partnerList", partnerService.findAllCustomers());
 		// end init
 
 		// add product to session
@@ -172,16 +182,16 @@ public class InvoiceController {
 		List<ProductEntity> productList = (List<ProductEntity>) session
 				.getAttribute(InvoiceController.SESSION_ATTRIBUTE);
 
-//		// remove existing product from list
-//		try {
-//			for (ProductEntity prod : productList) {
-//				if (prod.getId() == id) {
-//					productList.remove(prod);
-//				}
-//			}
-//		} catch (ConcurrentModificationException e) {
-//			// Fuck off
-//		}
+		// // remove existing product from list
+		// try {
+		// for (ProductEntity prod : productList) {
+		// if (prod.getId() == id) {
+		// productList.remove(prod);
+		// }
+		// }
+		// } catch (ConcurrentModificationException e) {
+		// // Fuck off
+		// }
 
 		// add edited product object to list
 		product.setId(id);
@@ -190,7 +200,7 @@ public class InvoiceController {
 		product.setCategory(category);
 		product.setSellPrice(productService.calculatePrice(product));
 		for (int i = 0; i < productList.size(); i++) {
-			if (productList.get(i).getId()==id) {
+			if (productList.get(i).getId() == id) {
 				productList.set(i, product);
 			}
 		}
