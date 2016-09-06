@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8"></meta>
-	<title>Partners</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
-	<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
+<meta charset="UTF-8"></meta>
+<title>Partners</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 </head>
 <body>
-	
+
 	<header class="container-fluid">
-			<!-- NAV MENU -->
-			<nav class="navbar navbar-default">
-				<div class="container-fluid">
+		<!-- NAV MENU -->
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="col-sm-8 col-sm-offset-2">
 					<div class="navbar-header">
-						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
+					<a class="navbar-brand" th:href="@{/}">Accounting App</a>
 					</div>
 					<ul class="nav navbar-nav">
 						<li><a th:href="@{/product}">All Products</a></li>
@@ -24,30 +26,41 @@
 						<li><a th:href="@{/partner}">My Partners</a></li>
 					</ul>
 				</div>
-				
-			</nav>
-			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
-		</header>
-
-	<h3>My Business Partners</h3>
-	<hr></hr>
-	<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><br></br>
-	<div>
-		<a th:href="@{/partner/create}">Create New</a>
-		<table border="1px">
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Type</th>
-				<th>Address</th>
-			</tr>
-			<tr th:each="partner:${partnerList}">
-				<td th:text="${partner.getId()}"></td>
-				<td th:text="${partner.getName()}"></td>
-				<td th:text="${partner.getType()}"></td>
-				<td th:text="${partner.getAddress()}"></td>
-			</tr>
-		</table>
+			</div>
+		</nav>
+		<span th:if="${param.message != null}" th:text="${param.message[0]}"
+			style="color: red;"></span>
+	</header>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<h3>My Business Partners</h3><hr></hr>
+				<button>
+					<a th:href="@{/partner/create}">Create New</a>
+				</button>
+				<table class="table">
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Address</th>
+					</tr>
+					<tr th:each="partner:${partnerList}">
+						<td th:text="${partner.getId()}"></td>
+						<td>
+							<a th:href="@{/partner/}+${partner.getId()}">
+								<span th:text="${partner.getName()}"></span>
+							</a>
+						</td>
+						<td th:text="${partner.getType()}"></td>
+						<td th:text="${partner.getAddress()}"></td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
 	</div>
+	
 </body>
 </html>

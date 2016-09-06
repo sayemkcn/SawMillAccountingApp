@@ -50,21 +50,22 @@
 <body>
 		<header class="container-fluid">
 			<!-- NAV MENU -->
-			<nav class="navbar navbar-default">
+			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
-					<div class="navbar-header">
+					<div class="col-md-8 col-md-offset-2">
+						<div class="navbar-header">
 						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
+						</div>
+						<ul class="nav navbar-nav">
+							<li><a th:href="@{/product}">All Products</a></li>
+							<li><a th:href="@{/product/create}">Add Product</a></li>
+							<li><a th:href="@{/invoice}">Invoices</a></li>
+							<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+							<li><a th:href="@{/category}">Categories</a></li>
+							<li><a th:href="@{/partner}">My Partners</a></li>
+						</ul>
 					</div>
-					<ul class="nav navbar-nav">
-						<li><a th:href="@{/product}">All Products</a></li>
-						<li><a th:href="@{/product/create}">Add Product</a></li>
-						<li><a th:href="@{/invoice}">Invoices</a></li>
-						<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
-						<li><a th:href="@{/category}">Categories</a></li>
-						<li><a th:href="@{/partner}">My Partners</a></li>
-					</ul>
 				</div>
-				
 			</nav>
 			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
 		</header>

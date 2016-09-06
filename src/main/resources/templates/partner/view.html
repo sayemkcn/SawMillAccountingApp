@@ -1,12 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1"></meta>
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1"></meta>
+	<title>Partner</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+	<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 </head>
 <body>
-
-	Partner: <span th:text="${partner.toString()}"></span><br></br>
-	Products: <span th:text="${productList.toString()}"></span><br></br>
+	
+	<!-- NAV MENU -->
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="navbar-header">
+				<a class="navbar-brand" th:href="@{/}">Accounting App</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/product}">All Products</a></li>
+					<li><a th:href="@{/product/create}">Add Product</a></li>
+					<li><a th:href="@{/invoice}">Invoices</a></li>
+					<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+					<li><a th:href="@{/category}">Categories</a></li>
+					<li><a th:href="@{/partner}">My Partners</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<h3>Partner</h3><br></br>
+				Name:
+				<span th:text="${partner.getName()}"></span><br></br>
+				Type:
+				<span th:text="${partner.getType()}"></span><br></br>
+				Address:
+				<span th:text="${partner.getAddress()}"></span>
+			</div>
+		</div>
+		<hr></hr>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			
+			<h3>Transactions:</h3><br></br>
+			<table class="table">
+				<tr>
+					<th>Date</th>
+					<th>Products</th>
+					<th>Ref</th>
+					<th>Debit</th>
+					<th>Credit</th>
+					<th>Balance</th>
+				</tr>
+				<div  th:each="product : ${productList}">
+					<tr>
+						<td th:text="${product.getCreated()}"></td>
+						<td th:text="${product.getCategory().getName() +', '+product.getNote()}"></td>
+						<td></td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()}"></span>
+						</td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('customer')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()} "></span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('customer')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()}"></span> 
+						</td>
+						<td>
+							 <span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()} "></span> 
+						</td>
+						<td th:text="Balance"></td>
+					</tr>
+				</div>
+			</table>
+		
+		</div>
+	</div>
+	
 </body>
 </html>
