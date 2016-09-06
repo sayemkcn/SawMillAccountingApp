@@ -28,16 +28,29 @@
 			</nav>
 			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
 		</header>
-		
-	<form th:action="@{/partner/create}" method="post">
-		Name: <input type="text" name="name" placeholder="Name"></input><br></br>
-		Address: <input type="text" name="address" placeholder="Address"></input><br></br>
-		Role: <select name="type">
-				<option value="customer">Customer</option>
-				<option value="supplier">Supplier</option>
-			</select><br></br>
-			<input type="submit" value="Create"></input>
-	</form>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<h3>Create Partner</h3><hr></hr>
+				<form th:action="@{/partner/create}" method="post">
+					<div class="form-group">
+						<label for="name">Name:</label>
+						<input type="text" id="name" name="name" placeholder="Name" class="form-control"></input>
+					</div>
+					<div class="form-group">
+						<label for="address">Address:</label>
+						<input type="text" id="address" name="address" placeholder="Address" class="form-control"></input>
+					</div>
+					<div class="form-group">
+						<label for="type">Role:</label>
+						<select name="type" class="form-control">
+							<option value="customer">Customer</option>
+							<option value="supplier">Supplier</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-default">Create</button>
+				</form>
+			</div>
+		</div>
 	
 </body>
 </html>

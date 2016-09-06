@@ -28,8 +28,10 @@
 				</div>
 			</div>
 		</nav>
-		<span th:if="${param.message != null}" th:text="${param.message[0]}"
-			style="color: red;"></span>
+		<div class="col-sm-8 col-sm-offset-2">
+			<span th:if="${param.message != null}" th:text="${param.message[0]}"
+				style="color: red;"></span>
+		</div>
 	</header>
 	
 	<div class="container-fluid">
