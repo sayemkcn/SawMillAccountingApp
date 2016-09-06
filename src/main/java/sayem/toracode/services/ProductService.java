@@ -154,4 +154,8 @@ public class ProductService {
 		fileOutputStream.close();
 		return file;
 	}
+
+	public List<ProductEntity> findByBusinessPartner(BusinessPartnerEntity partner) {
+		return productRepository.findByBusinessPartner(partner);
+	}
 }

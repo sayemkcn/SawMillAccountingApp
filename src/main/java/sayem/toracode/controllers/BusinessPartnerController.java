@@ -5,17 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import sayem.toracode.entities.BusinessPartnerEntity;
 import sayem.toracode.services.BusinessPartnerService;
+import sayem.toracode.services.ProductService;
 
 @Controller
 @RequestMapping("/partner")
 public class BusinessPartnerController {
 	@Autowired
 	private BusinessPartnerService partnerService;
+	@Autowired
+	private ProductService productService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String getAllPartners(Model model) {
@@ -42,6 +46,14 @@ public class BusinessPartnerController {
 			model.addAttribute("message", e.toString());
 			return "partner/createPartner";
 		}
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String partnerProfile(@PathVariable Long id, Model model) {
+		BusinessPartnerEntity partner = partnerService.findById(id);
+		model.addAttribute("partner", partner);
+		model.addAttribute("productList", productService.findByBusinessPartner(partner));
+		return "partner/view";
 	}
 
 }
