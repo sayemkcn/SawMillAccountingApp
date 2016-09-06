@@ -62,6 +62,13 @@
 						Rate: <input type="number" name="productProperties.rate" placeholder="Rate" th:value="${product?.getProductProperties()?.getRate()}" required="required"></input><br></br>
 					</div>
 					<br></br>
+					Supplier Name:<br></br>
+					<select name="supplierId">
+						<option th:each="partner:${partnerList}" th:value="${partner.getId()}" th:selected="${partner.getId()==product.getBusinessPartner().getId()}">
+							<span th:text="${partner.getName()}+' - '+${partner.getAddress()}"></span>
+						</option>
+					</select><a th:href="@{/partner/create}">Create New Supplier</a>
+					<br></br>
 					Note:<br></br>
 					<textarea type="text" name="note" placeholder="Note" th:text="${product?.getNote()}"></textarea><br></br><br></br>
 					<input type="submit" value="Update Product"></input>

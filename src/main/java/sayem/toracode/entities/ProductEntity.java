@@ -1,5 +1,6 @@
 package sayem.toracode.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -16,7 +17,7 @@ public class ProductEntity extends BaseEntity {
 	private String type;
 	@Transient
 	private String categoryName;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private CategoryEntity category;
 	@Embedded
 	private ProductProperties productProperties;
@@ -24,7 +25,7 @@ public class ProductEntity extends BaseEntity {
 	private long sellPrice;
 	private String status;
 	private String note;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private BusinessPartnerEntity businessPartner;
 
 	public String getSerial() {

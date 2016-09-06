@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import sayem.toracode.entities.BusinessPartnerEntity;
 import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
+import sayem.toracode.exception.CategoryNotFoundException;
 import sayem.toracode.repositories.ProductRepository;
 import sayem.toracode.services.BusinessPartnerService;
 import sayem.toracode.services.CategoryService;
@@ -50,12 +52,13 @@ public class ProductController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String addProductForm(Model model) {
 		model.addAttribute("categoryList", categoryService.findAll());
-		model.addAttribute("partnerList",businessPartnerService.findAllSuppliers());
+		model.addAttribute("partnerList", businessPartnerService.findAllSuppliers());
 		return "product/addProduct";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String addProduct(@RequestParam("supplierId") Long supplierId,@ModelAttribute ProductEntity productEntity, BindingResult bindingResult) {
+	public String addProduct(@RequestParam("supplierId") Long supplierId, @ModelAttribute ProductEntity productEntity,
+			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.toString());
 		} else {
@@ -77,6 +80,7 @@ public class ProductController {
 		ProductEntity productEntity = productRepository.findOne(id);
 		model.addAttribute("product", productEntity);
 		model.addAttribute("categoryList", categoryService.findAll());
+		model.addAttribute("partnerList", businessPartnerService.findAllSuppliers());
 		return "product/addProduct";
 	}
 
@@ -109,17 +113,21 @@ public class ProductController {
 		return "redirect:/product";
 	}
 
-	
 	// Import from spreadsheet
-	@RequestMapping(value="/import",method=RequestMethod.POST)
-	public String importFile(@RequestParam("importFile") MultipartFile file){
+	@RequestMapping(value = "/import", method = RequestMethod.POST)
+	public String importFile(@RequestParam("importFile") MultipartFile file) {
 		if (!file.isEmpty()) {
-			List<ProductEntity> productList = productService.extractData(file);
-			try{
+			try {
+				List<ProductEntity> productList = productService.extractData(file);
+				if (productList==null) {
+					return "redirect:/product/create?message=Could not find one or more categories. Please create all of the categories first!";
+				}
 				productService.saveProductList(productList);
 				return "redirect:/product/create?message=Successfully imported products!";
-			}catch(Exception e){
-				return "redirect:/product/create?message="+e.getMessage();
+			} catch (CategoryNotFoundException catEx) {
+				return "redirect:/product/create?message=" + catEx.getMessage();
+			} catch (Exception e) {
+				return "redirect:/product/create?message=" + e.getMessage();
 			}
 		}
 		return "redirect:/product/create?message=File can not be empty.";

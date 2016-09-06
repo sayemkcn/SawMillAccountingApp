@@ -17,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import sayem.toracode.entities.BusinessPartnerEntity;
 import sayem.toracode.entities.CategoryEntity;
 import sayem.toracode.entities.ProductEntity;
+import sayem.toracode.exception.CategoryNotFoundException;
 import sayem.toracode.pojo.ProductProperties;
 import sayem.toracode.repositories.ProductRepository;
 
@@ -64,7 +66,7 @@ public class ProductService {
 		productRepository.save(productList);
 	}
 
-	public List<ProductEntity> extractData(MultipartFile file) {
+	public List<ProductEntity> extractData(MultipartFile file) throws CategoryNotFoundException {
 		List<ProductEntity> productList = new ArrayList<>();
 		try {
 			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.convertToFile(file)));
@@ -93,13 +95,13 @@ public class ProductService {
 			for (int r = 0; r < rows; r++) {
 				row = sheet.getRow(r);
 				if (row != null) {
-					List<Object> rowValueList = new ArrayList();
+					List<Object> rowValueList = new ArrayList<Object>();
 					for (int c = 0; c < cols; c++) {
 						cell = row.getCell((short) c);
 						if (cell != null) {
 							if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
 								rowValueList.add(cell.getNumericCellValue());
-							}else if(cell.getCellType()==HSSFCell.CELL_TYPE_STRING){
+							} else if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
 								rowValueList.add(cell.getStringCellValue());
 							}
 						}
@@ -109,22 +111,34 @@ public class ProductService {
 					product.setType(String.valueOf(rowValueList.get(1)));
 					product.setCategoryName(String.valueOf(rowValueList.get(2)));
 					ProductProperties properties = new ProductProperties();
-					properties.setPerimeter((double)rowValueList.get(3));
-					properties.setHeight((double)rowValueList.get(4));
-					properties.setWidth((double)rowValueList.get(5));
-					properties.setLength((double)rowValueList.get(6));
+					properties.setPerimeter((double) rowValueList.get(3));
+					properties.setHeight((double) rowValueList.get(4));
+					properties.setWidth((double) rowValueList.get(5));
+					properties.setLength((double) rowValueList.get(6));
 					properties.setRate(new Double(rowValueList.get(7).toString()).intValue());
 					product.setProductProperties(properties);
-					product.setNote(String.valueOf(rowValueList.get(8)));
+					product.setNote(String.valueOf(rowValueList.get(11)));
+					BusinessPartnerEntity partner = new BusinessPartnerEntity();
+					partner.setName(String.valueOf(rowValueList.get(8)));
+					partner.setAddress(String.valueOf(rowValueList.get(9)));
+					partner.setType(String.valueOf(rowValueList.get(10)));
 					// find category with category name and set it to product
 					CategoryEntity category = categoryService.findByName(product.getCategoryName());
+					if (category == null) {
+						throw new CategoryNotFoundException(
+								"Can not find all of the categories. Please create the categories first!");
+					}
 					product.setCategory(category);
+					// find Business Partner
+					product.setBusinessPartner(partner);
 					// calculate purchase price and save into database
 					double productSize = product.getProductProperties().getSize(product.getType());
 					product.setPurchasePrice((long) (productSize * product.getProductProperties().getRate()));
 					productList.add(product);
 				}
 			}
+		} catch (CategoryNotFoundException e) {
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

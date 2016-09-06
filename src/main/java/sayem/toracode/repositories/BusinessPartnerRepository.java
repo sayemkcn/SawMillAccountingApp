@@ -11,4 +11,5 @@ import sayem.toracode.entities.BusinessPartnerEntity;
 public interface BusinessPartnerRepository extends JpaRepository<BusinessPartnerEntity, Long> {
 	public BusinessPartnerEntity findById(Long id);
 	public List<BusinessPartnerEntity> findByType(String type);
+	public BusinessPartnerEntity findByName(String name);
 }

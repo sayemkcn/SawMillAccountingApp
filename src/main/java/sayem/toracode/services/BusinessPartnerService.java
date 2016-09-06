@@ -34,5 +34,9 @@ public class BusinessPartnerService {
 	public BusinessPartnerEntity findById(Long id){
 		return businessPartnerRepository.findById(id);
 	}
+
+	public BusinessPartnerEntity findByName(String name) {
+		return businessPartnerRepository.findByName(name);
+	}
 	
 }

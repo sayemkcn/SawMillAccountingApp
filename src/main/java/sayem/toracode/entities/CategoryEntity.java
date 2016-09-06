@@ -3,9 +3,9 @@ package sayem.toracode.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-@Entity(name="category")
+@Entity(name = "category")
 public class CategoryEntity extends BaseEntity {
-	@Column(nullable=false)
+	@Column(nullable = false, unique = true)
 	private String name;
 
 	public String getName() {

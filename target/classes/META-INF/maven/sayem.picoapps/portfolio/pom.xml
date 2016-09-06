@@ -70,7 +70,6 @@
 		    <artifactId>spring-boot-starter-actuator</artifactId>
 		    <version>1.4.0.RELEASE</version>
 		</dependency>
-		
 
 	</dependencies>
 
