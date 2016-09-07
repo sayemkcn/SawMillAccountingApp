@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import sayem.toracode.entities.BusinessPartnerEntity;
 import sayem.toracode.services.BusinessPartnerService;
+import sayem.toracode.services.InvoiceService;
 import sayem.toracode.services.ProductService;
 
 @Controller
@@ -20,6 +21,8 @@ public class BusinessPartnerController {
 	private BusinessPartnerService partnerService;
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private InvoiceService invoiceService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String getAllPartners(Model model) {
@@ -52,7 +55,14 @@ public class BusinessPartnerController {
 	public String partnerProfile(@PathVariable Long id, Model model) {
 		BusinessPartnerEntity partner = partnerService.findById(id);
 		model.addAttribute("partner", partner);
-		model.addAttribute("productList", productService.findByBusinessPartner(partner));
+//		if (partner.getType().equals(BusinessPartnerEntity.PARTNER_TYPE_SUPPLIER)) {
+			model.addAttribute("productList", productService.findByBusinessPartner(partner));
+			model.addAttribute("invoiceList",invoiceService.findByPartner(partner));
+//		} else {
+//			// product list for customer from invoice list
+//			// to be completed later
+//		}
+
 		return "partner/view";
 	}
 

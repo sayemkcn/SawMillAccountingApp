@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sayem.toracode.entities.BusinessPartnerEntity;
 import sayem.toracode.entities.InvoiceEntity;
 import sayem.toracode.entities.ProductEntity;
 import sayem.toracode.pojo.ProductProperties;
@@ -64,5 +65,7 @@ public class InvoiceService {
 	public List<InvoiceEntity> findAll() {
 		return invoiceRepository.findAll();
 	}
-
+	public List<InvoiceEntity> findByPartner(BusinessPartnerEntity partner){
+		return invoiceRepository.findByBusinessPartner(partner);
+	}
 }

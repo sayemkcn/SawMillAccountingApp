@@ -56,7 +56,8 @@
 					<th>Credit</th>
 					<th>Balance</th>
 				</tr>
-				<div  th:each="product : ${productList}">
+				<!-- for supplier | suppliers have product associated with them -->
+				<div th:if="${productList != null}" th:each="product : ${productList}">
 					<tr>
 						<td th:text="${product.getCreated()}"></td>
 						<td th:text="${product.getCategory().getName() +', '+product.getNote()}"></td>
@@ -78,6 +79,35 @@
 						</td>
 						<td>
 							 <span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()} "></span> 
+						</td>
+						<td th:text="Balance"></td>
+					</tr>
+				</div>
+				<!-- for customers | customers have invoice associated with them -->
+				<div th:if="${invoiceList != null}" th:each="invoice : ${invoiceList}">
+					<tr>
+						<td th:text="${invoice.getCreated()}"></td>
+						<td>
+								<span th:each="product:${invoice.getProductList()}" th:text="${'('+product.getSerial()+')'}"></span>
+						</td>
+						<td></td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${invoice.getSellingPrice(invoice.getProductList(),invoice.getDiscount())}"></span>
+						</td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('customer')}" th:text="${invoice.getSellingPrice(invoice.getProductList(),invoice.getDiscount())}"></span>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+							<span th:if="${partner.getType().toLowerCase().equals('customer')}" th:text="${invoice.getSellingPrice(invoice.getProductList(),invoice.getDiscount())}"></span> 
+						</td>
+						<td>
+							 <span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${invoice.getSellingPrice(invoice.getProductList(),invoice.getDiscount())}"></span> 
 						</td>
 						<td th:text="Balance"></td>
 					</tr>

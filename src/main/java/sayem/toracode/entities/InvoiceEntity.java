@@ -41,13 +41,22 @@ public class InvoiceEntity extends BaseEntity {
 	public void setProductList(List<InvoiceProduct> productList) {
 		this.productList = productList;
 	}
-	
-	public Long getTotalPrice(List<InvoiceProduct> productList){
+
+	public Long getTotalPrice(List<InvoiceProduct> productList) {
 		long price = 0;
-		for(InvoiceProduct product: productList){
-			price+=product.getSellPrice();
+		for (InvoiceProduct product : productList) {
+			price += product.getSellPrice();
 		}
 		return price;
+	}
+
+	public long getSellingPrice(List<InvoiceProduct> productList, long discount) {
+		long price = 0;
+		for (InvoiceProduct product : productList) {
+			price += (long) (product.getProductProperties().getSize(product.getType())
+					* product.getProductProperties().getRate());
+		}
+		return price - discount;
 	}
 
 	public String getStatus() {

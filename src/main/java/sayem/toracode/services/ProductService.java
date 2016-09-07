@@ -68,9 +68,11 @@ public class ProductService {
 
 	public List<ProductEntity> extractData(MultipartFile file) throws CategoryNotFoundException {
 		List<ProductEntity> productList = new ArrayList<>();
-		try {
-			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.convertToFile(file)));
-			HSSFWorkbook wb = new HSSFWorkbook(fs);
+		try (POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.convertToFile(file)));
+				HSSFWorkbook wb = new HSSFWorkbook(fs)) {
+			// POIFSFileSystem fs = new POIFSFileSystem(new
+			// FileInputStream(this.convertToFile(file)));
+			// HSSFWorkbook wb = new HSSFWorkbook(fs);
 			HSSFSheet sheet = wb.getSheetAt(0);
 			HSSFRow row;
 			HSSFCell cell;
