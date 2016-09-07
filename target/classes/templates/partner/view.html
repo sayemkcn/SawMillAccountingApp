@@ -60,7 +60,11 @@
 				<div th:if="${productList != null}" th:each="product : ${productList}">
 					<tr>
 						<td th:text="${product.getCreated()}"></td>
-						<td th:text="${product.getCategory().getName() +', '+product.getNote()}"></td>
+						<td>
+							<a th:href="@{/product/}+${product.getId()}">
+								<span th:text="${product.getCategory().getName() +', '+product.getNote()}"></span>
+							</a>
+						</td>
 						<td></td>
 						<td>
 							<span th:if="${partner.getType().toLowerCase().equals('supplier')}" th:text="${product.getProductProperties().getSize(product.getType())*product.getProductProperties().getRate()}"></span>
@@ -87,8 +91,10 @@
 				<div th:if="${invoiceList != null}" th:each="invoice : ${invoiceList}">
 					<tr>
 						<td th:text="${invoice.getCreated()}"></td>
-						<td>
+						<td>	
+							<a th:href="@{/invoice/}+${invoice.getId()}">
 								<span th:each="product:${invoice.getProductList()}" th:text="${'('+product.getSerial()+')'}"></span>
+							</a>
 						</td>
 						<td></td>
 						<td>
