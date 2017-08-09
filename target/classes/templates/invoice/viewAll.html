@@ -8,45 +8,50 @@
 </head>
 <body>
 
-	<header class="container-fluid">
-			<!-- NAV MENU -->
-			<nav class="navbar navbar-inverse">
-				<div class="container-fluid">
-					<div class="col-md-8 col-md-offset-2">
-						<div class="navbar-header">
-						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
-						</div>
-						<ul class="nav navbar-nav">
-							<li><a th:href="@{/product}">All Products</a></li>
-							<li><a th:href="@{/product/create}">Add Product</a></li>
-							<li><a th:href="@{/invoice}">Invoices</a></li>
-							<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
-							<li><a th:href="@{/category}">Categories</a></li>
-							<li><a th:href="@{/partner}">My Partners</a></li>
-						</ul>
-					</div>
+	<!-- NAV MENU -->
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="navbar-header">
+				<a class="navbar-brand" th:href="@{/}">Accounting App</a>
 				</div>
-			</nav>
-			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
-		</header>
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/product}">All Products</a></li>
+					<li><a th:href="@{/product/create}">Add Product</a></li>
+					<li><a th:href="@{/invoice}">Invoices</a></li>
+					<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+					<li><a th:href="@{/category}">Categories</a></li>
+					<li><a th:href="@{/partner}">My Partners</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>	
+		</div>
+	</div>
 	
-	<div>
-		<table border="1px">
-			<tr>
-				<th>Invoice ID</th>
-				<th>Product Names</th>
-				<th>Discount</th>
-			</tr>
-			<tr th:each="invoice:${invoiceList}">
-				<td><span th:text="${invoice.getId()}"></span></td>
-				<td>
-					<a th:href="@{/invoice/}+${invoice.getId()}">
-						<span th:each="product:${invoice.getProductList()}" th:text="${'('+product.getSerial()+')'}"></span>
-					</a>
-				</td>
-				<td><span th:text="${invoice.getDiscount()}"></span></td>	
-			</tr>
-		</table>
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<h3>Invoices</h3><hr></hr>
+			<table class="table table-bordered table-hover table-striped">
+				<tr>
+					<th>Invoice ID</th>
+					<th>Product Names</th>
+					<th>Discount</th>
+				</tr>
+				<tr th:each="invoice:${invoiceList}">
+					<td><span th:text="${invoice.getId()}"></span></td>
+					<td>
+						<a th:href="@{/invoice/}+${invoice.getId()}">
+							<span th:each="product:${invoice.getProductList()}" th:text="${'('+product.getSerial()+')'}"></span>
+						</a>
+					</td>
+					<td><span th:text="${invoice.getDiscount()}"></span></td>	
+				</tr>
+			</table>
+		</div>
 	</div>
 	
 </body>

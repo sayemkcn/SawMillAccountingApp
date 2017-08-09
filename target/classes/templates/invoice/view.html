@@ -17,83 +17,91 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
 	<link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'></link>
 </head>
-	<body>
-
-		<header class="container-fluid">
-			<!-- NAV MENU -->
-			<!-- NAV MENU -->
-			<nav class="navbar navbar-inverse">
-				<div class="container-fluid">
-					<div class="col-md-8 col-md-offset-2">
-						<div class="navbar-header">
-						<a class="navbar-brand" th:href="@{/}">Accounting App</a>
-						</div>
-						<ul class="nav navbar-nav">
-							<li><a th:href="@{/product}">All Products</a></li>
-							<li><a th:href="@{/product/create}">Add Product</a></li>
-							<li><a th:href="@{/invoice}">Invoices</a></li>
-							<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
-							<li><a th:href="@{/category}">Categories</a></li>
-							<li><a th:href="@{/partner}">My Partners</a></li>
-						</ul>
+	<body class="container-fluid">
+		<!-- NAV MENU -->
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="navbar-header">
+					<a class="navbar-brand" th:href="@{/}">Accounting App</a>
 					</div>
+					<ul class="nav navbar-nav">
+						<li><a th:href="@{/product}">All Products</a></li>
+						<li><a th:href="@{/product/create}">Add Product</a></li>
+						<li><a th:href="@{/invoice}">Invoices</a></li>
+						<li><a th:href="@{/invoice/create}">Generate Invoice</a></li>
+						<li><a th:href="@{/category}">Categories</a></li>
+						<li><a th:href="@{/partner}">My Partners</a></li>
+					</ul>
 				</div>
-			</nav>
-			<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
-		</header>
-	
-		<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: green;"></span><hr></hr>
-		<div id="invoiceContent">
-			<div>
-				<div>
-					Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
-					Total Products: <span th:text="${invoice.getProductList().size()}"></span>
-				</div>
-				 <div th:if="${invoice.getBusinessPartner() != null}">
-				 	Customer Name: <span th:text="${invoice.getBusinessPartner().getName()}"></span><br></br>
-				 	Address: <span th:text="${invoice.getBusinessPartner().getAddress()}"></span>
-				 </div>
-				<hr></hr>
-				<table border="1px">
-				
-					<tr>
-						<th>Serial Number</th>
-						<th>Category</th>
-						<th>Type</th>
-						<th>Perimeter</th>
-						<th>Height</th>
-						<th>Width</th>
-						<th>Length</th>
-						<th>Size</th>
-						<th>Rate</th>
-						<th>Price</th>
-					</tr>
-					<tr th:each="product:${invoice.getProductList()}">
-						<td th:text="${product.getSerial()}"></td>
-						<td th:text="${product.getCategory().getName()}"></td>
-						<td th:text="${product.getType()}"></td>
-						<td th:text="${product.getProductProperties().getPerimeter()}"></td>
-						<td th:text="${product.getProductProperties().getHeight()}"></td>
-						<td th:text="${product.getProductProperties().getWidth()}"></td>
-						<td th:text="${product.getProductProperties().getLength()}"></td>
-						<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
-						<td th:text="${product.getProductProperties().getRate()}"></td>
-						<td th:text="${product.getSellPrice()}"></td>
-					</tr>
-				</table>
-				
 			</div>
-			<br></br><br></br>
-			Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
-			Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
-			Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
-			Date: <span th:text="${invoice.getCreated()}"></span><br></br>
-			Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
+		</nav>
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<span th:if="${param.message != null}" th:text="${param.message[0]}" style="color: red;"></span>
+			</div>
 		</div>
-		<br></br>
-		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a><br></br>
-		<a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Complete}">Mark as complete</a><br></br>
-		<button id="printButton" onclick="showPrintPrompt()">Print</button>
 		
+		<div id="invoiceContent" class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				
+				<div>
+					<div>
+						Invoice ID:  <span th:text="${invoice.getId()}"></span><br></br>
+						Total Products: <span th:text="${invoice.getProductList().size()}"></span>
+					</div>
+					 <div th:if="${invoice.getBusinessPartner() != null}">
+					 	Customer Name: <span th:text="${invoice.getBusinessPartner().getName()}"></span><br></br>
+					 	Address: <span th:text="${invoice.getBusinessPartner().getAddress()}"></span>
+					 </div>
+					<hr></hr>
+					
+					<table class="table table-hover table-condensed">
+					
+						<tr>
+							<th>Serial Number</th>
+							<th>Category</th>
+							<th>Type</th>
+							<th>Perimeter</th>
+							<th>Height</th>
+							<th>Width</th>
+							<th>Length</th>
+							<th>Size</th>
+							<th>Rate</th>
+							<th>Price</th>
+						</tr>
+						<tr th:each="product:${invoice.getProductList()}">
+							<td th:text="${product.getSerial()}"></td>
+							<td th:text="${product.getCategory().getName()}"></td>
+							<td th:text="${product.getType()}"></td>
+							<td th:text="${product.getProductProperties().getPerimeter()}"></td>
+							<td th:text="${product.getProductProperties().getHeight()}"></td>
+							<td th:text="${product.getProductProperties().getWidth()}"></td>
+							<td th:text="${product.getProductProperties().getLength()}"></td>
+							<td th:text="${product.getProductProperties().getSizeRounded(product.getType())}"></td>
+							<td th:text="${product.getProductProperties().getRate()}"></td>
+							<td th:text="${product.getSellPrice()}"></td>
+						</tr>
+					</table>
+					
+				</div>
+				<br></br><br></br>
+				Total Price: <span th:text="${invoice.getTotalPrice(invoice.getProductList())}"></span><br></br>
+				Discount:  <span th:text="${invoice.getDiscount()}"></span><br></br>
+				Price After Discount: <span th:text="${invoice.getTotalPrice(invoice.getProductList())-invoice.getDiscount()}"></span><br></br>
+				Date: <span th:text="${invoice.getCreated()}"></span><br></br>
+				Status:  <span th:text="${invoice.getStatus()}"></span><br></br>
+			
+			</div>
+			
+		</div>
+		<hr></hr>
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<button class="btn btn-default"><a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Pending..}">Mark as pending</a></button><br></br>
+				<button class="btn btn-default"><a th:href="@{/invoice/edit/}+${invoice.getId()}+@{?status=Complete}">Mark as complete</a></button><br></br>
+				<button class="btn btn-default" id="printButton" onclick="showPrintPrompt()">Print</button>
+			</div>
+		</div>
 	</body>
 </html>
